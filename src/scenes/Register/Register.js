@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import Header from '../../components/Header'
 import CustomInput from '../../components/FormComponents/CustomInput'
@@ -9,33 +9,12 @@ import styles from '../../styles/commonStyles'
 
 import firebase from 'firebase/app'
 
-const Login = ({navigation}) => {
+const Register = ({navigation}) => {
 
     const [user, setUser] = useState({
         email: '',
         password: ''
     });
-
-    const logIn = () => {
-        firebase.auth()
-            .signInWithEmailAndPassword(user.email, user.password)
-            .then((e) => {
-                console.log(e)
-                console.log('User signed in!');
-            })
-            .catch(error => {
-                /*
-                if (error.code === 'auth/email-already-in-use') {
-                console.log('That email address is already in use!');
-                }
-
-                if (error.code === 'auth/invalid-email') {
-                console.log('That email address is invalid!');
-                }*/
-
-                console.error(error);
-            });
-    }
 
     const changeUserInfo = (id, value) => {
         setUser({
@@ -44,13 +23,39 @@ const Login = ({navigation}) => {
         })
     }
 
+    const register = () => {
+        firebase.auth()
+            .createUserWithEmailAndPassword(user.email, user.password)
+            .then(() => {
+                console.log('User account created & signed in!');
+            })
+            .catch(error => {
+                
+                if (error.code === 'auth/email-already-in-use') {
+                console.log('That email address is already in use!');
+                }
+
+                if (error.code === 'auth/invalid-email') {
+                console.log('That email address is invalid!');
+                }
+
+                console.error(error);
+            });
+    }
+
     return (
         <View>
             <Header navigation={navigation} />
             <View style={styles.body}>
                 <Card containerStyle={styles.mainCard}>
-                    <Card.Title>Iniciar sesión</Card.Title>
+                    <Card.Title>Registrarse</Card.Title>
                     <Card.Divider/>
+                        <CustomInput 
+                            placeholder={'Nombre de usuario'}
+                        />
+                        <CustomInput 
+                            placeholder={'Nombre completo'}
+                        />
                         <CustomInput
                             id={'email'} 
                             placeholder={'Correo electrónico'}
@@ -62,16 +67,20 @@ const Login = ({navigation}) => {
                             isPasswordInput={true}
                             onChange={changeUserInfo}
                         />
-                        <Button 
-                            title='Iniciar sesión'
-                            type='outline'
-                            onPress={() =>logIn()} 
+                        <CustomInput 
+                            placeholder={'Repetir contraseña'}
+                            isPasswordInput={true}
                         />
                         <Button 
                             title='Registrarse'
+                            type='outline'
+                            onPress={() =>register()}  
+                        />
+                        <Button 
+                            title='Iniciar sesión'
                             type='clear'
                             titleStyle={styles.secondaryButtonTitle}
-                            onPress={() => navigation.navigate('Register')}
+                            onPress={() => navigation.navigate('Login')}
                         />
                 </Card>
             </View>
@@ -79,4 +88,4 @@ const Login = ({navigation}) => {
     )
 }
 
-export default Login;
+export default Register;

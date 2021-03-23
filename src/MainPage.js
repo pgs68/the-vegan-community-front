@@ -1,49 +1,99 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
-import { BrowserRouter as Router, Redirect, Switch} from "react-router-dom";
-import { StyleSheet, Text, View } from 'react-native';
-
-import PublicRoute from './components/Authentication/PublicRoute'
-import PrivateRoute from './components/Authentication/PrivateRoute'
+import { View, Text } from 'react-native';
+import {
+    DrawerContentScrollView,
+    DrawerItem, 
+    createDrawerNavigator 
+} from '@react-navigation/drawer';
 
 import Home from './scenes/Home'
 import Login from './scenes/Login'
+import Register from './scenes/Register'
+import IsVegan from './scenes/IsVegan'
+import { Icon } from 'react-native-elements';
 
-const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-  });
+const Drawer = createDrawerNavigator();
+
+function SideMenu(props){
+    return (
+        <DrawerContentScrollView {...props}>
+            <DrawerItem  
+                label="Iniciar sesión"
+                icon={() => <Icon name='user-circle' type='font-awesome-5'/>}
+                onPress={() => props.navigation.navigate('Login')}
+            />
+            <DrawerItem  
+                label="Productos"
+                icon={() => <Icon name='shopping-bag' type='font-awesome-5'/>}
+                onPress={() => props.navigation.navigate('Home')}
+            />
+            <DrawerItem  
+                label="¿Es vegano?"
+                icon={() => <Icon name='carrot' type='font-awesome-5'/>}
+                onPress={() => props.navigation.navigate('IsVegan')}
+            />
+        </DrawerContentScrollView>
+    )
+}
+
+function LoggedSideMenu(props){
+    return (
+        <DrawerContentScrollView {...props}>
+            <DrawerItem  
+                label="Productos"
+                icon={() => <Icon name='shopping-bag' type='font-awesome-5'/>}
+                onPress={() => props.navigation.navigate('Home')}
+            />
+            <DrawerItem  
+                label="¿Es vegano?"
+                icon={() => <Icon name='carrot' type='font-awesome-5'/>}
+                onPress={() => props.navigation.navigate('IsVegan')}
+            />
+        </DrawerContentScrollView>
+    )
+}
 
 const MainPage = ({
-    isLoggedIn
+    isLoggedIn,
+    firebase
 }) => {
+
+    // Set an initializing state whilst Firebase connects
+    const [initializing, setInitializing] = useState(true);
+    const [user, setUser] = useState();
+
+    // Handle user state changes
+    function onAuthStateChanged(user) {
+        setUser(user);
+        if (initializing) setInitializing(false);
+    }
+
+    useEffect(() => {
+        const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChanged);
+        return subscriber; // unsubscribe on unmount
+    }, []);
+
+    if (initializing) return null;
+
+    if (!user) {
+        return (
+            <Drawer.Navigator initialRouteName={"Login"} drawerContent={props => <SideMenu {...props} />}>
+                <Drawer.Screen name="Home" component={Home}/>
+                <Drawer.Screen name="Login" component={Login} />
+                <Drawer.Screen name="Register" component={Register} />
+                <Drawer.Screen name="IsVegan" component={IsVegan} />
+            </Drawer.Navigator>
+        );
+    }
+
     return (
-        <Router>
-            <View style={styles.container}>
-                <Switch>
-                    <PublicRoute 
-                        component={Home}
-                        path="/"
-                        isLoggedIn={isLoggedIn}
-                        exact
-                    />
-                    <PublicRoute 
-                        component={Login}
-                        path="/login"
-                    />
-                    <PrivateRoute 
-                        component={() => <Redirect to={"/"} />}
-                        path="/"
-                        isLoggedIn={isLoggedIn}
-                    />
-                </Switch>
-            </View>
-        </Router>
-    )
+        <Drawer.Navigator initialRouteName={"Home"} drawerContent={props => <LoggedSideMenu {...props} />}>
+            <Drawer.Screen name="Home" component={Home}/>
+            <Drawer.Screen name="IsVegan" component={IsVegan} />
+        </Drawer.Navigator>
+    );
+
 }
 
 const mapStateToProps = state => ({
