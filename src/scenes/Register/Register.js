@@ -3,45 +3,24 @@ import { Text, View } from 'react-native';
 
 import Header from '../../components/Header'
 import CustomInput from '../../components/FormComponents/CustomInput'
+import ErrorMessage from '../../components/ErrorMessage'
 import { Card, Button } from 'react-native-elements'
 
 import styles from '../../styles/commonStyles'
 
-import firebase from 'firebase/app'
+import { register } from '../../common/utilities/firebaseFunctions'
 
 const Register = ({navigation}) => {
 
     const [user, setUser] = useState({
         email: '',
-        password: ''
+        password: '',
+        userName: '',
+        name: '',
+        repeatPassword: ''
     });
 
-    const changeUserInfo = (id, value) => {
-        setUser({
-            ...user,
-            [id]: value
-        })
-    }
-
-    const register = () => {
-        firebase.auth()
-            .createUserWithEmailAndPassword(user.email, user.password)
-            .then(() => {
-                console.log('User account created & signed in!');
-            })
-            .catch(error => {
-                
-                if (error.code === 'auth/email-already-in-use') {
-                console.log('That email address is already in use!');
-                }
-
-                if (error.code === 'auth/invalid-email') {
-                console.log('That email address is invalid!');
-                }
-
-                console.error(error);
-            });
-    }
+    const [error, setError] = useState(null)
 
     return (
         <View>
@@ -50,31 +29,53 @@ const Register = ({navigation}) => {
                 <Card containerStyle={styles.mainCard}>
                     <Card.Title>Registrarse</Card.Title>
                     <Card.Divider/>
-                        <CustomInput 
+                        <CustomInput
+                            id={'userName'}
+                            changeFunction={setUser}
+                            formObject={user}
                             placeholder={'Nombre de usuario'}
                         />
-                        <CustomInput 
+                        <CustomInput
+                            id={'name'}
+                            changeFunction={setUser}
+                            formObject={user} 
                             placeholder={'Nombre completo'}
                         />
                         <CustomInput
-                            id={'email'} 
+                            id={'email'}
+                            changeFunction={setUser}
+                            formObject={user} 
                             placeholder={'Correo electrónico'}
-                            onChange={changeUserInfo}
                         />
                         <CustomInput
-                            id={'password'} 
+                            id={'password'}
+                            changeFunction={setUser}
+                            formObject={user} 
                             placeholder={'Contraseña'}
                             isPasswordInput={true}
-                            onChange={changeUserInfo}
                         />
-                        <CustomInput 
+                        <CustomInput
+                            id={'repeatPassword'}
+                            changeFunction={setUser}
+                            formObject={user} 
                             placeholder={'Repetir contraseña'}
                             isPasswordInput={true}
                         />
+                        {
+                            error && 
+                            <ErrorMessage message={error.message} />
+                        }
                         <Button 
                             title='Registrarse'
                             type='outline'
-                            onPress={() =>register()}  
+                            onPress={() =>register(user, navigation, setError)}
+                            disabled={
+                                user.email === '' || 
+                                user.password === '' ||
+                                user.name === '' ||
+                                user.userName === '' ||
+                                user.repeatPassword === ''
+                            }   
                         />
                         <Button 
                             title='Iniciar sesión'

@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
 import { Input } from 'react-native-elements'
 
+import { changeFormInfo } from '../../common/utilities/formFunctions'
+
 const CustomInput = ({
     placeholder,
-    onChange,
+    changeFunction,
     id,
+    formObject,
     defaultValue,
     isPasswordInput
 }) => {
@@ -12,7 +15,7 @@ const CustomInput = ({
     return(
         <Input 
             placeholder={placeholder}
-            onChangeText={value => onChange(id, value)}
+            onChangeText={value => changeFormInfo(formObject, id, value, changeFunction)}
             secureTextEntry={isPasswordInput}
             value={defaultValue}
         />

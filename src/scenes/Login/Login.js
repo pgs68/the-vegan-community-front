@@ -3,46 +3,21 @@ import { View } from 'react-native';
 
 import Header from '../../components/Header'
 import CustomInput from '../../components/FormComponents/CustomInput'
+import ErrorMessage from '../../components/ErrorMessage'
+import { login } from '../../common/utilities/firebaseFunctions'
 import { Card, Button } from 'react-native-elements'
 
 import styles from '../../styles/commonStyles'
 
-import firebase from 'firebase/app'
 
 const Login = ({navigation}) => {
 
     const [user, setUser] = useState({
         email: '',
         password: ''
-    });
+    });  
 
-    const logIn = () => {
-        firebase.auth()
-            .signInWithEmailAndPassword(user.email, user.password)
-            .then((e) => {
-                console.log(e)
-                console.log('User signed in!');
-            })
-            .catch(error => {
-                /*
-                if (error.code === 'auth/email-already-in-use') {
-                console.log('That email address is already in use!');
-                }
-
-                if (error.code === 'auth/invalid-email') {
-                console.log('That email address is invalid!');
-                }*/
-
-                console.error(error);
-            });
-    }
-
-    const changeUserInfo = (id, value) => {
-        setUser({
-            ...user,
-            [id]: value
-        })
-    }
+    const [error, setError] = useState(null)
 
     return (
         <View>
@@ -52,20 +27,27 @@ const Login = ({navigation}) => {
                     <Card.Title>Iniciar sesión</Card.Title>
                     <Card.Divider/>
                         <CustomInput
-                            id={'email'} 
+                            id={'email'}
+                            changeFunction={setUser}
+                            formObject={user} 
                             placeholder={'Correo electrónico'}
-                            onChange={changeUserInfo}
                         />
                         <CustomInput
-                            id={'password'} 
+                            id={'password'}
+                            changeFunction={setUser}
+                            formObject={user}  
                             placeholder={'Contraseña'}
                             isPasswordInput={true}
-                            onChange={changeUserInfo}
                         />
+                        {
+                            error && 
+                            <ErrorMessage message={error.message} />
+                        }
                         <Button 
                             title='Iniciar sesión'
                             type='outline'
-                            onPress={() =>logIn()} 
+                            onPress={() =>login(user, navigation, setError)}
+                            disabled={user.email === '' || user.password === ''} 
                         />
                         <Button 
                             title='Registrarse'

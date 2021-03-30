@@ -75,25 +75,14 @@ const MainPage = ({
     }, []);
 
     if (initializing) return null;
-
-    if (!user) {
-        return (
-            <Drawer.Navigator initialRouteName={"Login"} drawerContent={props => <SideMenu {...props} />}>
-                <Drawer.Screen name="Home" component={Home}/>
-                <Drawer.Screen name="Login" component={Login} />
-                <Drawer.Screen name="Register" component={Register} />
-                <Drawer.Screen name="IsVegan" component={IsVegan} />
-            </Drawer.Navigator>
-        );
-    }
-
     return (
-        <Drawer.Navigator initialRouteName={"Home"} drawerContent={props => <LoggedSideMenu {...props} />}>
+        <Drawer.Navigator initialRouteName={"Login"} drawerContent={props => user ? <LoggedSideMenu {...props} /> : <SideMenu {...props} />}>
             <Drawer.Screen name="Home" component={Home}/>
+            <Drawer.Screen name="Login" component={Login} />
+            <Drawer.Screen name="Register" component={Register} />
             <Drawer.Screen name="IsVegan" component={IsVegan} />
         </Drawer.Navigator>
     );
-
 }
 
 const mapStateToProps = state => ({

@@ -10,6 +10,11 @@ const styles = StyleSheet.create({
     },
     secondaryButtonTitle: {
         fontSize: 15
+    },
+    errorMessage: {
+        width: '100%',
+        alignItems: 'center',
+        flexDirection: 'row'
     }
 })
 
