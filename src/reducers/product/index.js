@@ -1,3 +1,5 @@
+import Crud from './crud'
+
 const initialState = {
     producto: {
         nombre: '',
@@ -9,7 +11,7 @@ const initialState = {
 }
 
 const Managers = {
-
+    ...Crud
 }
 
 export default (state = initialState, action = { type: '' }) => {

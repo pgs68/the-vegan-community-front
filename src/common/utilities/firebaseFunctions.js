@@ -1,4 +1,5 @@
 import firebase from 'firebase/app'
+import 'firebase/firestore'
 
 const firebaseCodes = (code) => {
     switch(code){
@@ -16,27 +17,39 @@ const firebaseCodes = (code) => {
     }
 }
 
+const getCurrentUser = () => {
+    return firebase.auth().currentUser
+}
+
+const getUserInformation = (uid) => {
+    console.log('UID: ', uid)
+    firebase.firestore().collection("usuarios").where('UID', '==', uid).get()
+        .then((snapshot) => {
+            console.log(snapshot.docs)
+        })
+}
 
 
 const login = (user, navigation, setError) => {
-    firebase.auth()
-        .signInWithEmailAndPassword(user.email, user.password)
-        .then((e) => {
-            console.log(e)
-            console.log('User signed in!');
-            navigation.navigate('Home')
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+        .then(() => {
+            firebase.auth()
+                .signInWithEmailAndPassword(user.email, user.password)
+                .then((e) => {
+                    navigation.navigate('Home')
+                })
+                .catch(error => {
+                    setError({message: firebaseCodes(error.code)})
+                    console.error(error);
+                });
         })
-        .catch(error => {
-            setError({message: firebaseCodes(error.code)})
-            console.error(error);
-        });
 }
 
-const logout = (navigation) => {
-    
+const logout = (navigation, changeLoggedIn) => {   
     firebase.auth()
         .signOut()
         .then(() => {
+            changeLoggedIn(false)
             console.log('User signed out!')
             navigation.navigate('Login')
         })
@@ -49,8 +62,34 @@ const register = (user, navigation, setError) => {
         firebase.auth()
             .createUserWithEmailAndPassword(user.email, user.password)
             .then(() => {
-                console.log('User account created & signed in!');
-                navigation.navigate('Home')
+                firebase.firestore()
+                    .collection("usuarios")
+                    .doc(user.userName)
+                    .get()
+                    .then((doc) => {
+                        if(doc.exists){
+                            setError({message: 'El nombre de usuario está en uso'})
+                            var currentUser = firebase.auth().currentUser
+                            currentUser.delete()
+                        } else {
+                            firebase.firestore().collection("usuarios").doc(user.userName).set({
+                                "cantidadComentarios": 0,
+                                "email": user.email,
+                                "estado": "activa",
+                                "fechaRegistro": firebase.firestore.Timestamp.fromDate(new Date()),
+                                "imagenUsuario": "",
+                                "nombreCompleto": user.name,
+                                "nombreUsuario": user.userName
+                            })
+                            .then(() => {
+                                console.log('User account created & signed in!');  
+                                navigation.navigate('Home')
+                            })
+                            .catch(error => {
+                                setError({message: firebaseCodes(error.code)})
+                            })
+                        }
+                    })     
             })
             .catch(error => {
                 setError({message: firebaseCodes(error.code)})
@@ -58,4 +97,4 @@ const register = (user, navigation, setError) => {
     }
 }
 
-export { login, logout, register }
+export { login, logout, register, getCurrentUser, getUserInformation }

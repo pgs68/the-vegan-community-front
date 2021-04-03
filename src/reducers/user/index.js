@@ -1,9 +1,13 @@
+import Auth from './auth'
+
 const initialState = {
-    isLoggedIn: false
+    isLoggedIn: false,
+    currentUser: {},
+    error: false
 }
 
 const Managers = {
-
+    ...Auth
 }
 
 export default (state = initialState, action = { type: '' }) => {

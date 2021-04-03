@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { connect } from 'react-redux'
 import { View } from 'react-native';
 
 import Header from '../../components/Header'
@@ -6,11 +7,16 @@ import CustomInput from '../../components/FormComponents/CustomInput'
 import ErrorMessage from '../../components/ErrorMessage'
 import { login } from '../../common/utilities/firebaseFunctions'
 import { Card, Button } from 'react-native-elements'
+import { setUserInformation } from '../../actions/user'
 
 import styles from '../../styles/commonStyles'
 
 
-const Login = ({navigation}) => {
+const Login = ({
+    navigation,
+    userLogged,
+    setUserInformation
+}) => {
 
     const [user, setUser] = useState({
         email: '',
@@ -18,6 +24,12 @@ const Login = ({navigation}) => {
     });  
 
     const [error, setError] = useState(null)
+
+    useEffect(() => {
+         if(userLogged){
+            navigation.navigate('Home')
+         }  
+    }, [])
 
     return (
         <View>
@@ -46,7 +58,10 @@ const Login = ({navigation}) => {
                         <Button 
                             title='Iniciar sesión'
                             type='outline'
-                            onPress={() =>login(user, navigation, setError)}
+                            onPress={() =>{
+                                login(user, navigation, setError)
+                                setUserInformation('TngQoo9FLbh5BvVSPhocoil2APH2')
+                            }}
                             disabled={user.email === '' || user.password === ''} 
                         />
                         <Button 
@@ -61,4 +76,12 @@ const Login = ({navigation}) => {
     )
 }
 
-export default Login;
+const mapStateToProps = state => ({
+    userLogged: state.user.isLoggedIn
+})
+
+const mapDispatchToProps = {
+    setUserInformation
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login)

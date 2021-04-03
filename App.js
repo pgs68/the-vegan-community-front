@@ -9,6 +9,7 @@ import MainPage from './src/MainPage'
 
 import firebase from 'firebase/app'
 require('firebase/auth')
+require('firebase/database')
 
 const firebaseConfig = {
   apiKey: "AIzaSyBFj4sZWvQV1Cz190Xay_1FtWtT7NshYnE",
