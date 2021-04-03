@@ -1,57 +1,92 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
-import { BrowserRouter as Router, Redirect, Switch} from "react-router-dom";
-import { StyleSheet, Text, View } from 'react-native';
-
-import PublicRoute from './components/Authentication/PublicRoute'
-import PrivateRoute from './components/Authentication/PrivateRoute'
+import {
+    DrawerContentScrollView,
+    DrawerItem, 
+    createDrawerNavigator 
+} from '@react-navigation/drawer';
 
 import Home from './scenes/Home'
 import Login from './scenes/Login'
+import Register from './scenes/Register'
+import IsVegan from './scenes/IsVegan'
+import { Icon } from 'react-native-elements';
 
-const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-  });
+import { isLoggedInChange, setUserInformation } from './actions/user'
 
-const MainPage = ({
-    isLoggedIn
-}) => {
+const Drawer = createDrawerNavigator();
+
+function SideMenu({props, userLogged}){
     return (
-        <Router>
-            <View style={styles.container}>
-                <Switch>
-                    <PublicRoute 
-                        component={Home}
-                        path="/"
-                        isLoggedIn={isLoggedIn}
-                        exact
-                    />
-                    <PublicRoute 
-                        component={Login}
-                        path="/login"
-                    />
-                    <PrivateRoute 
-                        component={() => <Redirect to={"/"} />}
-                        path="/"
-                        isLoggedIn={isLoggedIn}
-                    />
-                </Switch>
-            </View>
-        </Router>
+        <DrawerContentScrollView {...props}>
+            {!userLogged && 
+                <DrawerItem  
+                label="Iniciar sesión"
+                icon={() => <Icon name='user-circle' type='font-awesome-5'/>}
+                onPress={() => props.navigation.navigate('Login')}
+            />
+            }         
+            <DrawerItem  
+                label="Productos"
+                icon={() => <Icon name='shopping-bag' type='font-awesome-5'/>}
+                onPress={() => props.navigation.navigate('Home')}
+            />
+            <DrawerItem  
+                label="¿Es vegano?"
+                icon={() => <Icon name='carrot' type='font-awesome-5'/>}
+                onPress={() => props.navigation.navigate('IsVegan')}
+            />
+        </DrawerContentScrollView>
     )
 }
 
+const MainPage = ({
+    firebase,
+    userLogged,
+    isLoggedInChange,
+    setUserInformation
+}) => {
+    
+    useEffect(() => {
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                setUserInformation(firebase.auth().currentUser.uid)
+                isLoggedInChange(true)
+            } else {
+                // No user is signed in.
+                isLoggedInChange(false)
+            }
+          });    
+    }, [userLogged])
+
+    return (
+        <Drawer.Navigator initialRouteName={"Home"} drawerContent={props => <SideMenu props={props} userLogged={userLogged}/>}>
+            {
+                userLogged ? (
+                    <>
+                        <Drawer.Screen name="Home" component={Home}/>
+                        <Drawer.Screen name="IsVegan" component={IsVegan} />
+                    </>
+                ) : (
+                    <>
+                        <Drawer.Screen name="Home" component={Home}/>
+                        <Drawer.Screen name="Login" component={Login} />
+                        <Drawer.Screen name="Register" component={Register} />
+                        <Drawer.Screen name="IsVegan" component={IsVegan} />
+                    </>
+                )
+            }
+        </Drawer.Navigator>
+    );
+}
+
 const mapStateToProps = state => ({
-    isLoggedIn: state.user.isLoggedIn
+    userLogged: state.user.isLoggedIn
 })
 
 const mapDispatchToProps = {
-
+    isLoggedInChange,
+    setUserInformation
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainPage)
