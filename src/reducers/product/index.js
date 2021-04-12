@@ -7,7 +7,9 @@ const initialState = {
         codebar: '',
         vegano: false
     },
-    productos: []
+    productos: [],
+    productosIsLoading: false,
+    error: false
 }
 
 const Managers = {

@@ -23,10 +23,10 @@ function CustomHeader({
                         onPress: () => navigation.navigate('Home')
                     }}
                     rightComponent={{
-                        icon: 'sign-out-alt',
-                        type: 'font-awesome-5',
+                        icon: 'add',
+                        type: 'material-icons',
                         color: '#fff',
-                        onPress: () => logout(navigation, isLoggedInChange)
+                        onPress: () => navigation.navigate('AddProduct')
                     }}
                 />
                 :

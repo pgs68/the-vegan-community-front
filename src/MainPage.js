@@ -10,9 +10,12 @@ import Home from './scenes/Home'
 import Login from './scenes/Login'
 import Register from './scenes/Register'
 import IsVegan from './scenes/IsVegan'
+import AddProduct from './scenes/AddProduct'
 import { Icon } from 'react-native-elements';
 
 import { isLoggedInChange, setUserInformation } from './actions/user'
+import { fetchProducts } from './actions/product'
+import { logout } from './common/utilities/firebaseFunctions'
 
 const Drawer = createDrawerNavigator();
 
@@ -21,10 +24,10 @@ function SideMenu({props, userLogged}){
         <DrawerContentScrollView {...props}>
             {!userLogged && 
                 <DrawerItem  
-                label="Iniciar sesión"
-                icon={() => <Icon name='user-circle' type='font-awesome-5'/>}
-                onPress={() => props.navigation.navigate('Login')}
-            />
+                    label="Iniciar sesión"
+                    icon={() => <Icon name='user-circle' type='font-awesome-5'/>}
+                    onPress={() => props.navigation.navigate('Login')}
+                />
             }         
             <DrawerItem  
                 label="Productos"
@@ -36,6 +39,13 @@ function SideMenu({props, userLogged}){
                 icon={() => <Icon name='carrot' type='font-awesome-5'/>}
                 onPress={() => props.navigation.navigate('IsVegan')}
             />
+            {userLogged &&
+                <DrawerItem 
+                    label="Cerrar sesión"
+                    icon={() => <Icon name='sign-out-alt' type='font-awesome-5'/>}
+                    onPress={() => logout(props.navigation, isLoggedInChange)}
+                />
+            }
         </DrawerContentScrollView>
     )
 }
@@ -44,7 +54,8 @@ const MainPage = ({
     firebase,
     userLogged,
     isLoggedInChange,
-    setUserInformation
+    setUserInformation,
+    fetchProducts
 }) => {
     
     useEffect(() => {
@@ -59,6 +70,10 @@ const MainPage = ({
           });    
     }, [userLogged])
 
+    useEffect(() => {
+        fetchProducts()
+    }, [])
+
     return (
         <Drawer.Navigator initialRouteName={"Home"} drawerContent={props => <SideMenu props={props} userLogged={userLogged}/>}>
             {
@@ -66,6 +81,7 @@ const MainPage = ({
                     <>
                         <Drawer.Screen name="Home" component={Home}/>
                         <Drawer.Screen name="IsVegan" component={IsVegan} />
+                        <Drawer.Screen name="AddProduct" component={AddProduct} />
                     </>
                 ) : (
                     <>
@@ -86,7 +102,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
     isLoggedInChange,
-    setUserInformation
+    setUserInformation,
+    fetchProducts
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainPage)

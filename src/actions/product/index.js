@@ -2,7 +2,8 @@ import {
     TypeActionsCrud,
     createProduct,
     fetchProducts,
-    changeProductFormInfo
+    changeProductFormInfo,
+    fetchPhotoProduct
 } from './crud'
 
 const Actions = {
@@ -13,5 +14,6 @@ export {
     Actions,
     createProduct,
     fetchProducts,
-    changeProductFormInfo
+    changeProductFormInfo,
+    fetchPhotoProduct
 }

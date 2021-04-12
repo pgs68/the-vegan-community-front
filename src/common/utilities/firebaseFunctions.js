@@ -1,5 +1,7 @@
 import firebase from 'firebase/app'
 import 'firebase/firestore'
+import 'firebase/storage'
+import product from '../../reducers/product'
 
 const firebaseCodes = (code) => {
     switch(code){
@@ -22,7 +24,6 @@ const getCurrentUser = () => {
 }
 
 const getUserInformation = (uid) => {
-    console.log('UID: ', uid)
     firebase.firestore().collection("usuarios").where('UID', '==', uid).get()
         .then((snapshot) => {
             console.log(snapshot.docs)
@@ -97,4 +98,17 @@ const register = (user, navigation, setError) => {
     }
 }
 
-export { login, logout, register, getCurrentUser, getUserInformation }
+async function getProductPhoto(photoName){
+    var photoUrl = ""
+    await firebase.storage().ref().child('productos/' + photoName)
+        .getDownloadURL()
+        .then((url) => {
+            photoUrl = JSON.stringify(url)
+        })
+        .catch(error => {
+            console.error(error)
+        })
+    return photoUrl 
+}
+
+export { login, logout, register, getCurrentUser, getUserInformation, getProductPhoto }
