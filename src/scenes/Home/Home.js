@@ -1,24 +1,24 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from "prop-types";
-import { fetchProducts } from '../../actions/product'
+import { fetchProducts, fetchPhotoProduct } from '../../actions/product'
 import { Text } from 'react-native';
 import { View } from 'react-native';
-
-import { getCurrentUser, getUserInformation } from '../../common/utilities/firebaseFunctions'
+import { Button } from 'react-native'
+import { ActivityIndicator } from 'react-native';
+import { Image } from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 
 import Header from '../../components/Header'
+import styles from './styles'
 
 const Home = ({
-    fetchProducts,
     navigation,
     isLoggedIn,
-    currentUser
+    currentUser,
+    productos,
 }) => {
-    useEffect(() => {
-        //fetchProducts()
         
-    })
     return (
         <View>
             <Header navigation={navigation} />
@@ -27,19 +27,60 @@ const Home = ({
                 :
                 <Text>No estás logueado</Text>
             }
-            
+            {
+                <View style={styles.productsList}>
+                    {
+                        productos.map(p => {
+                            return (
+                                <View style={styles.productCard}>
+                                    <Image 
+                                        source={{ uri: p.fotoPrincipal }}
+                                        style={{ width: 200, height: 200 }}
+                                        PlaceholderContent={<ActivityIndicator />}
+                                    />
+                                    <View style={styles.productDetails}>
+                                        <View style={styles.productRowDetails}>
+                                            <Text style={{fontWeight: '700'}}>{p.nombre}</Text>
+                                            <Text>{p.precio}€</Text>
+                                        </View>
+                                        <View style={styles.productRowDetails}>
+                                            <Text>{p.supermercados[0]}</Text>
+                                            <View style={styles.productRating}>
+                                                <Text>{p.valoracion}</Text>
+                                                <Icon name='star-o' type='font-awesome' color='#efdf74'/>
+                                                {
+                                                    /* Cuando se implementen las votaciones, y el usuario haya votado el producto, se usará este icono:
+                                                        <Icon name='star' type='font-awesome'/>
+                                                    */
+                                                }
+                                            </View>
+                                            
+                                        </View>
+                                        <View style={styles.productButton}>
+                                            <Button 
+                                                title='Ver detalles'
+                                            />
+                                        </View>
+                                    </View>
+                                </View>
+                            )                
+                        })
+                    }
+                </View>
+            }
         </View>
     )
 }
 
 const mapStateToProps = state => ({
     productos: state.product.productos,
+    loadingProductos: state.product.productosIsLoading,
     isLoggedIn: state.user.isLoggedIn,
     currentUser: state.user.currentUser
 })
 
 const mapDispatchToProps = {
-    fetchProducts
+
 }
 
 const HomeConnected = connect(mapStateToProps, mapDispatchToProps)(Home)
