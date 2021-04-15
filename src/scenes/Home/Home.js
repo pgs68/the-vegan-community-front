@@ -22,11 +22,6 @@ const Home = ({
     return (
         <View>
             <Header navigation={navigation} />
-            {isLoggedIn ? 
-                <Text>Bienvenido {currentUser.nombreCompleto}</Text>
-                :
-                <Text>No estás logueado</Text>
-            }
             {
                 <View style={styles.productsList}>
                     {

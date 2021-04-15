@@ -8,8 +8,7 @@ import { isLoggedInChange } from '../actions/user'
 
 function CustomHeader({
     navigation,
-    userLogged,
-    isLoggedInChange
+    userLogged
 }){
     return (
         <View>
@@ -50,7 +49,6 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = {
-    isLoggedInChange
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CustomHeader)

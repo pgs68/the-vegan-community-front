@@ -8,13 +8,15 @@ export default StyleSheet.create({
         borderColor: 'grey',
         marginHorizontal: 20,
         marginVertical: 10,
-        maxWidth: 600,
+        maxWidth: 700,
         display: 'flex',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        flexGrow: 1
     },
     productsList: {
         display: 'flex',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        flexDirection: 'row'
     },
     productDetails: {
         display: 'flex',
