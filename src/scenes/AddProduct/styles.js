@@ -17,6 +17,9 @@ export default StyleSheet.create({
         fontSize: 21,
         textAlign: 'center'
     },
+    body:{
+        marginBottom: 20
+    },
     bodyRow:{
         flexGrow: 1,
         display: 'flex',
@@ -49,5 +52,10 @@ export default StyleSheet.create({
         alignItems: 'center',
         borderWidth: 1,
         borderColor: '#87da72',
+    },
+    switchRow: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-evenly'
     }
 })

@@ -15,7 +15,9 @@ const TypeActionsCrud = {
     CREATE_PRODUCT: 'CREATE_PRODUCT',
     FETCH_PRODUCTS: 'FETCH_PRODUCTS',
     CHANGE_PRODUCT_INFO: 'CHANGE_PRODUCT_INFO',
-    FETCH_PHOTO_PRODUCTS: 'FETCH_PHOTO_PRODUCTS'
+    FETCH_PHOTO_PRODUCTS: 'FETCH_PHOTO_PRODUCTS',
+    FETCH_SUPERMARKETS: 'FETCH_SUPERMARKETS',
+    POST_PHOTO_PRODUCT: 'POST_PHOTO_PRODUCT'
 }
 
 const createProduct = (product) => ({
@@ -41,10 +43,24 @@ const fetchPhotoProduct = (id, photoName) => ({
     payload: firebase.storage().ref().child('productos/' + photoName).getDownloadURL()
 })
 
+const fetchSupermarkets = () => ({
+    type: TypeActionsCrud.FETCH_SUPERMARKETS,
+    payload: firebase.firestore().collection("supermercados").get()
+})
+
+const postPhotoProduct = (nombreImagen, blob) => ({
+    type: TypeActionsCrud.POST_PHOTO_PRODUCT,
+    payload: firebase.storage().ref('productos/' + nombreImagen).put(blob).then(function(snapshot){
+        snapshot.ref.getDownloadURL()
+    })
+})
+
 export {
     TypeActionsCrud,
     createProduct,
     fetchProducts,
     changeProductFormInfo,
-    fetchPhotoProduct
+    fetchPhotoProduct,
+    fetchSupermarkets,
+    postPhotoProduct
 }

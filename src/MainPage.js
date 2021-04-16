@@ -15,6 +15,7 @@ import { Icon } from 'react-native-elements';
 
 import { isLoggedInChange, setUserInformation } from './actions/user'
 import { fetchProducts } from './actions/product'
+import { fetchSupermarkets } from './actions/product'
 import { logout } from './common/utilities/firebaseFunctions'
 
 const Drawer = createDrawerNavigator();
@@ -55,7 +56,8 @@ const MainPage = ({
     userLogged,
     isLoggedInChange,
     setUserInformation,
-    fetchProducts
+    fetchProducts,
+    fetchSupermarkets
 }) => {
     
     useEffect(() => {
@@ -72,6 +74,7 @@ const MainPage = ({
 
     useEffect(() => {
         fetchProducts()
+        fetchSupermarkets()
     }, [])
 
     return (
@@ -103,7 +106,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
     isLoggedInChange,
     setUserInformation,
-    fetchProducts
+    fetchProducts,
+    fetchSupermarkets
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainPage)

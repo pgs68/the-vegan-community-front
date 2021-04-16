@@ -16,7 +16,7 @@ export default StyleSheet.create({
     productsList: {
         display: 'flex',
         justifyContent: 'center',
-        flexDirection: 'row'
+        flexDirection: 'column'
     },
     productDetails: {
         display: 'flex',
