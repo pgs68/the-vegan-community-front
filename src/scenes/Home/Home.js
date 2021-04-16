@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { fetchProducts, fetchPhotoProduct } from '../../actions/product'
 import { Text } from 'react-native';
 import { View } from 'react-native';
-import { Button } from 'react-native'
+import { Button, ScrollView } from 'react-native'
 import { ActivityIndicator } from 'react-native';
 import { Image } from 'react-native-elements';
 import { Icon } from 'react-native-elements';
@@ -20,9 +20,9 @@ const Home = ({
 }) => {
         
     return (
-        <View>
+        <View style={{flex: 1}}>
             <Header navigation={navigation} />
-            {
+            <ScrollView>
                 <View style={styles.productsList}>
                     {
                         productos.map(p => {
@@ -62,7 +62,7 @@ const Home = ({
                         })
                     }
                 </View>
-            }
+            </ScrollView>
         </View>
     )
 }
