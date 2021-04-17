@@ -16,6 +16,7 @@ import Login from './scenes/Login'
 import Register from './scenes/Register'
 import IsVegan from './scenes/IsVegan'
 import AddProduct from './scenes/AddProduct'
+import ListaSupermercados from './scenes/ListaSupermercados'
 
 //Actions and functions
 import { isLoggedInChange, setUserInformation } from './actions/user'
@@ -39,6 +40,11 @@ function SideMenu({props, userLogged}){
                 label="Productos"
                 icon={() => <Icon name='shopping-bag' type='font-awesome-5'/>}
                 onPress={() => props.navigation.navigate('Home')}
+            />
+            <DrawerItem  
+                label="Supermercados"
+                icon={() => <Icon name='shopping-cart' type='font-awesome-5'/>}
+                onPress={() => props.navigation.navigate('ListaSupermercados')}
             />
             <DrawerItem  
                 label="¿Es vegano?"
@@ -88,6 +94,7 @@ const MainPage = ({
                             <Drawer.Screen name="Home" component={Home}/>
                             <Drawer.Screen name="IsVegan" component={IsVegan} />
                             <Drawer.Screen name="AddProduct" component={AddProduct} />
+                            <Drawer.Screen name="ListaSupermercados" component={ListaSupermercados} />
                         </>
                     ) : (
                         <>
@@ -95,6 +102,7 @@ const MainPage = ({
                             <Drawer.Screen name="Login" component={Login} />
                             <Drawer.Screen name="Register" component={Register} />
                             <Drawer.Screen name="IsVegan" component={IsVegan} />
+                            <Drawer.Screen name="ListaSupermercados" component={ListaSupermercados} />
                         </>
                     )
                 }

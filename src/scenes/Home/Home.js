@@ -6,8 +6,6 @@ import { useFocusEffect } from '@react-navigation/native';
 
 //Library components
 import { View, ScrollView, ActivityIndicator } from 'react-native';
-import { List } from 'react-native-paper';
-import { Icon } from 'react-native-elements';
 
 //Own components
 import Header from '../../components/Header'
@@ -32,7 +30,6 @@ const Home = ({
     useFocusEffect(
         React.useCallback(() => {
             //ComponentWillMount
-            fetchProducts(filtros)
             return () => {
                 //ComponentWillUnmount
                 setExpandedFilters(false)
