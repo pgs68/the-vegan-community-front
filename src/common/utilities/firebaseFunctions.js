@@ -77,7 +77,7 @@ const register = (user, navigation, setError) => {
                                 "email": user.email,
                                 "estado": "activa",
                                 "fechaRegistro": firebase.firestore.Timestamp.fromDate(new Date()),
-                                "imagenUsuario": "",
+                                "imagenUsuario": "https://firebasestorage.googleapis.com/v0/b/the-vegan-community-api.appspot.com/o/usuarios%2Fdefault.PNG?alt=media&token=7dfe9aa2-99e0-4fa7-aa32-7f135f0a54a1",
                                 "nombreCompleto": user.name,
                                 "nombreUsuario": user.userName
                             })
@@ -148,20 +148,13 @@ async function subirImagenProductoFromBlob(nombreImagen, blob){
     return downloadURL
 }
 
-async function subirProducto(producto, usuario){
-    /*
-        fotoGeneral: null, 
-        fotoIngredientes: null,  
-        codigoBarras: '', 
-        nombre: '',
-        precio: '',
-        supermercado: []
-    */
+async function subirProducto(producto, currentUser){
+    const precio = (Math.round(Number(producto.precio) * 100) / 100).toFixed(2)
     var docProduct = {
         nombre: producto.nombre,
         supermercados: producto.supermercado,
         fotoPrincipal: producto.fotoGeneral,
-        precio: producto.precio,
+        precio: Number(precio), 
         valoracion: 5,
         vegano: producto.vegano,
         vegetariano: producto.vegetariano,
@@ -169,7 +162,9 @@ async function subirProducto(producto, usuario){
         fechaPublicacion: firebase.firestore.Timestamp.fromDate(new Date()),
         vecesVisto: 0,
         detalles: {
-            fotoIngredientes: producto.fotoIngredientes
+            fotoIngredientes: producto.fotoIngredientes,
+            autor: currentUser.nombreUsuario,
+            imagenAutor: currentUser.imagenUsuario
         }
     }
     await firebase.firestore().collection("productos")

@@ -21,6 +21,7 @@ const qrSize = width * 0.7;
 
 const AddProduct = ({
     navigation,
+    currentUser, 
     supermercados
 }) => {
 
@@ -88,26 +89,31 @@ const AddProduct = ({
         }
       };
 
-    async function publicarProducto(){
+    async function publicarProducto(currentUser){ 
+        let precio = producto.precio
+        precio = precio.replace(',', '.')
         if(
             producto.fotoGeneral === null || 
             producto.fotoIngredientes === null || 
             producto.codigoBarras === '' || 
             producto.nombre === '' || 
-            producto.precio === '' ||
+            precio === '' ||
             producto.supermercado.length === 0
         ){
             setError({ message: 'Faltan campos obligatorios por rellenar' })
-        } else {
+        } else if(isNaN(precio)){
+            setError({ message: 'El formato del precio no es correcto' })
+        }else {
+            setError(null)
             const urlFotoGeneral = await subirImagenProductoFromUri(producto.fotoGeneral)
             const urlFotoIngredientes = await subirImagenProductoFromUri(producto.fotoIngredientes)
             var productoFinal = {
                 ...producto,
+                precio: precio,
                 fotoGeneral: urlFotoGeneral,
                 fotoIngredientes: urlFotoIngredientes
             }
-            console.log(productoFinal)
-            subirProducto(productoFinal, {})
+            subirProducto(productoFinal, currentUser)
         }
     }
 
@@ -158,6 +164,7 @@ const AddProduct = ({
                                 changeFunction={setProducto}
                                 formObject={producto}
                                 placeholder={'Precio €'}
+                                type={'number'}
                             />
                             <View>
                                 <DropDownPicker 
@@ -165,8 +172,9 @@ const AddProduct = ({
                                     placeholder="Selecciona un supermercado"
                                     onChangeItem={item => setProducto({
                                         ...producto,
-                                        supermercado: item.value
+                                        supermercado: [item.value]
                                     })}
+                                    style={{ backgroundColor: '#fff' }}
                                     containerStyle={{height: 40}}
                                 />
                             </View>
@@ -193,7 +201,7 @@ const AddProduct = ({
                             <Button 
                                 title='Publicar producto'
                                 type='outline'
-                                onPress={() => publicarProducto()}
+                                onPress={() => publicarProducto(currentUser)}
                             />
                         </Card>
                     </View>
@@ -259,7 +267,8 @@ const scanerStyles = StyleSheet.create({
   });
 
 const mapStateToProps = state => ({
-    supermercados: state.product.supermercados
+    supermercados: state.product.supermercados,
+    currentUser: state.user.currentUser
 })
 const mapDispatchToProps = {
     postPhotoProduct

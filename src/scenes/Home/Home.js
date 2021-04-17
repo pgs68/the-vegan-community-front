@@ -8,6 +8,8 @@ import { Button, ScrollView } from 'react-native'
 import { ActivityIndicator } from 'react-native';
 import { Image } from 'react-native-elements';
 import { Icon } from 'react-native-elements';
+import ProductListItem from '../../components/ProductListItem'
+
 
 import Header from '../../components/Header'
 import styles from './styles'
@@ -27,6 +29,8 @@ const Home = ({
                     {
                         productos.map(p => {
                             return (
+                                <ProductListItem product={p}/>
+                                /*
                                 <View style={styles.productCard}>
                                     <Image 
                                         source={{ uri: p.fotoPrincipal }}
@@ -44,9 +48,9 @@ const Home = ({
                                                 <Text>{p.valoracion}</Text>
                                                 <Icon name='star-o' type='font-awesome' color='#efdf74'/>
                                                 {
-                                                    /* Cuando se implementen las votaciones, y el usuario haya votado el producto, se usará este icono:
-                                                        <Icon name='star' type='font-awesome'/>
-                                                    */
+                                                    // Cuando se implementen las votaciones, y el usuario haya votado el producto, se usará este icono:
+                                                    //    <Icon name='star' type='font-awesome'/>
+                                                    
                                                 }
                                             </View>
                                             
@@ -58,6 +62,7 @@ const Home = ({
                                         </View>
                                     </View>
                                 </View>
+                                */
                             )                
                         })
                     }
