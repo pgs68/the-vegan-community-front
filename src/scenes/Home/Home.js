@@ -53,6 +53,7 @@ const Home = ({
                         filtros={filtros}
                         supermercados={supermercados}
                         setFiltros={setFilters}
+                        cleanFiltros={cleanFilters}
                     />
                     {
                         productos.map(p => {

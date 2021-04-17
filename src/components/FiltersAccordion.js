@@ -16,6 +16,7 @@ const FiltersAccordion = ({
     setExpandedFilters,
     filtros,
     setFiltros,
+    cleanFiltros,
     supermercados
 }) => {
 
@@ -61,6 +62,9 @@ const FiltersAccordion = ({
                             onOpen={() => setExpandedDropdown(true)}
                             onClose={() => setExpandedDropdown(false)}
                         />
+                        {supermercado !== null && 
+                            <Icon name='delete' type='feather' color='#e06565' style={styles.icon} onPress={() => cleanFiltros()}/>
+                        }
                     </View>
                 </List.Accordion>
             </List.Section>
@@ -93,6 +97,10 @@ const styles = StyleSheet.create({
     },
     dropdown: {
         width: 300
+    },
+    icon: {
+        marginLeft: 10,
+        top: 7
     }
 })
 
