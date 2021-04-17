@@ -1,20 +1,28 @@
+//Utilities
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
+import Constants from 'expo-constants';
+import { useFocusEffect } from '@react-navigation/native';
+
+//Library components
 import { Text, View, Platform, Dimensions, StyleSheet, Image, ScrollView } from 'react-native';
 import { Icon } from 'react-native-elements';
 import * as ImagePicker from 'expo-image-picker'
 import { BarCodeScanner } from 'expo-barcode-scanner'
-import Constants from 'expo-constants';
 import { Card, Button } from 'react-native-elements'
 import DropDownPicker from 'react-native-dropdown-picker'
 
+//Own components
 import Header from '../../components/Header'
 import styles from './styles'
 import CustomInput from '../../components/FormComponents/CustomInput'
 import CustomSwitch from '../../components/FormComponents/CustomSwitch'
-import { subirImagenProductoFromBlob, subirImagenProductoFromUri, subirProducto, transformImageToBlob } from '../../common/utilities/firebaseFunctions'
-import { postPhotoProduct } from '../../actions/product'
 import ErrorMessage from '../../components/ErrorMessage'
+
+//Actions and functions
+import { subirImagenProductoFromUri } from '../../common/utilities/firebaseFunctions'
+import { createProduct  } from '../../actions/product'
+
 
 const { width } = Dimensions.get('window');
 const qrSize = width * 0.7;
@@ -22,13 +30,15 @@ const qrSize = width * 0.7;
 const AddProduct = ({
     navigation,
     currentUser, 
-    supermercados
+    supermercados,
+    createProduct
 }) => {
 
     const [fotoGeneral, setFotoGeneral] = useState(null);
     const [fotoIngredientes, setFotoIngredientes] = useState(null);
     const [permisoScaner, setPermisoScaner] = useState(null) //Solo hace falta para movil
     const [scanned, setScanned] = useState(true);
+    const [supermercadoSelected, setSupermercadoSelected] = useState(null)
     const [supermercadosDropdown, setSupermercadosDropdrown] = useState([])
     const [producto, setProducto] = useState({ 
         fotoGeneral: null, 
@@ -41,6 +51,31 @@ const AddProduct = ({
         vegetariano: false
     })
     const [error, setError] = useState(null)
+
+    useFocusEffect(
+        React.useCallback(() => {
+            //ComponentWillMount
+            console.log(producto)
+            return () => {
+                //ComponentWillUnmount
+                    setFotoGeneral(null)
+                    setFotoIngredientes(null)
+                    setSupermercadoSelected(null)
+                    setError(null)
+                    setScanned(true)
+                    setProducto({
+                        fotoGeneral: null, 
+                        fotoIngredientes: null,  
+                        codigoBarras: '', 
+                        nombre: '',
+                        precio: '',
+                        supermercado: [],
+                        vegano: false,
+                        vegetariano: false
+                    })
+            }
+        }, [])
+    )
     
     useEffect(() => {
         var supermercadosAux = []
@@ -113,7 +148,7 @@ const AddProduct = ({
                 fotoGeneral: urlFotoGeneral,
                 fotoIngredientes: urlFotoIngredientes
             }
-            subirProducto(productoFinal, currentUser)
+            createProduct(productoFinal, currentUser)
         }
     }
 
@@ -141,6 +176,7 @@ const AddProduct = ({
                                         changeFunction={setProducto}
                                         formObject={producto}
                                         placeholder={'Codigo de barras'}
+                                        defaultValue={producto.codigoBarras}
                                     />
                                 :
                                     <View style={producto.codigoBarras !== '' ? styles.addImageCardSuccess : styles.addImageCard} >
@@ -158,6 +194,7 @@ const AddProduct = ({
                                 changeFunction={setProducto}
                                 formObject={producto}
                                 placeholder={'Nombre'}
+                                defaultValue={producto.nombre}
                             />
                             <CustomInput 
                                 id={'precio'}
@@ -165,17 +202,22 @@ const AddProduct = ({
                                 formObject={producto}
                                 placeholder={'Precio €'}
                                 type={'number'}
+                                defaultValue={producto.precio}
                             />
                             <View>
                                 <DropDownPicker 
                                     items={supermercadosDropdown}
                                     placeholder="Selecciona un supermercado"
-                                    onChangeItem={item => setProducto({
-                                        ...producto,
-                                        supermercado: [item.value]
-                                    })}
+                                    onChangeItem={item => {
+                                        setProducto({
+                                            ...producto,
+                                            supermercado: [item.value]
+                                        })
+                                        setSupermercadoSelected(item.value)
+                                    }}
                                     style={{ backgroundColor: '#fff' }}
                                     containerStyle={{height: 40}}
+                                    defaultValue={supermercadoSelected}
                                 />
                             </View>
                             <View style={styles.switchRow}>
@@ -271,7 +313,7 @@ const mapStateToProps = state => ({
     currentUser: state.user.currentUser
 })
 const mapDispatchToProps = {
-    postPhotoProduct
+    createProduct
 }
 
 const AddProductConnected = connect(mapStateToProps, mapDispatchToProps)(AddProduct)

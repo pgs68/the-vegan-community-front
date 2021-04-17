@@ -1,9 +1,16 @@
 import { Actions } from '../../actions/product'
 import { fullfilled, rejected, pending } from '../utils'
 
-const createProductFullFilled = (state, { payload }) => ({
-    ...state
-})
+const createProductFullFilled = (state, { payload }) => {
+    console.log(payload)
+    return {
+        ...state,
+        notification: {
+            show: true,
+            message: 'Producto creado correctamente'
+        }
+    }
+}
 
 const createProductRejected = state => ({
     ...state
@@ -89,12 +96,7 @@ const fetchSupermarketsRejected = (state, {payload}) => ({
     error: payload
 })
 
-const postPhotoProduct = (state, {payload}) => {
-    console.log(payload)
-    return {
-        ...state
-    }
-}
+
 
 const Crud = {
     [fullfilled(Actions.CREATE_PRODUCT)]: createProductFullFilled,
@@ -106,8 +108,7 @@ const Crud = {
     [fullfilled(Actions.FETCH_PHOTO_PRODUCTS)]: fetchPhotoProductFullFilled,
     [rejected(Actions.FETCH_PHOTO_PRODUCTS)]: fetchPhotoProductRejected,
     [fullfilled(Actions.FETCH_SUPERMARKETS)]: fetchSupermarketsFullfilled,
-    [rejected(Actions.FETCH_SUPERMARKETS)]: fetchSupermarketsRejected,
-    [Actions.POST_PHOTO_PRODUCT]: postPhotoProduct
+    [rejected(Actions.FETCH_SUPERMARKETS)]: fetchSupermarketsRejected
 }
 
 export default Crud

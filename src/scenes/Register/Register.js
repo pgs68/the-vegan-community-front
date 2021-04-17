@@ -1,14 +1,20 @@
+//Utilities
 import React, { useState } from 'react'
-import { Text, View, ScrollView } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 
+//Library components
+import { Text, View, ScrollView } from 'react-native';
+import { Card, Button } from 'react-native-elements'
+
+//Own components
 import Header from '../../components/Header'
 import CustomInput from '../../components/FormComponents/CustomInput'
 import ErrorMessage from '../../components/ErrorMessage'
-import { Card, Button } from 'react-native-elements'
-
 import styles from '../../styles/commonStyles'
 
+//Actions and functions
 import { register } from '../../common/utilities/firebaseFunctions'
+
 
 const Register = ({navigation}) => {
 
@@ -21,6 +27,23 @@ const Register = ({navigation}) => {
     });
 
     const [error, setError] = useState(null)
+
+    useFocusEffect(
+        React.useCallback(() => {
+            //ComponentWillMount
+            return () => {
+                //ComponentWillUnmount
+                setError(null)
+                setUser({
+                    email: '',
+                    password: '',
+                    userName: '',
+                    name: '',
+                    repeatPassword: ''
+                })
+            }
+        }, [])
+    )
 
     return (
         <View style={{flex: 1}}>

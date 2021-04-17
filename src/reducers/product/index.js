@@ -10,7 +10,11 @@ const initialState = {
     productos: [],
     productosIsLoading: false,
     error: false,
-    supermercados: []
+    supermercados: [],
+    notification: {
+        show: false,
+        message: ''
+    }
 }
 
 const Managers = {

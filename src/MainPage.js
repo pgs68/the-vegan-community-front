@@ -1,22 +1,27 @@
-import React, { useState, useEffect } from 'react'
+//Utilities
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
+
+//Library components
 import {
     DrawerContentScrollView,
     DrawerItem, 
     createDrawerNavigator 
 } from '@react-navigation/drawer';
+import { Icon } from 'react-native-elements';
 
+//Own components
 import Home from './scenes/Home'
 import Login from './scenes/Login'
 import Register from './scenes/Register'
 import IsVegan from './scenes/IsVegan'
 import AddProduct from './scenes/AddProduct'
-import { Icon } from 'react-native-elements';
 
+//Actions and functions
 import { isLoggedInChange, setUserInformation } from './actions/user'
-import { fetchProducts } from './actions/product'
 import { fetchSupermarkets } from './actions/product'
 import { logout } from './common/utilities/firebaseFunctions'
+
 
 const Drawer = createDrawerNavigator();
 
@@ -56,7 +61,6 @@ const MainPage = ({
     userLogged,
     isLoggedInChange,
     setUserInformation,
-    fetchProducts,
     fetchSupermarkets
 }) => {
     
@@ -73,29 +77,28 @@ const MainPage = ({
     }, [userLogged])
 
     useEffect(() => {
-        fetchProducts()
         fetchSupermarkets()
     }, [])
 
     return (
-        <Drawer.Navigator initialRouteName={"Home"} drawerContent={props => <SideMenu props={props} userLogged={userLogged}/>}>
-            {
-                userLogged ? (
-                    <>
-                        <Drawer.Screen name="Home" component={Home}/>
-                        <Drawer.Screen name="IsVegan" component={IsVegan} />
-                        <Drawer.Screen name="AddProduct" component={AddProduct} />
-                    </>
-                ) : (
-                    <>
-                        <Drawer.Screen name="Home" component={Home}/>
-                        <Drawer.Screen name="Login" component={Login} />
-                        <Drawer.Screen name="Register" component={Register} />
-                        <Drawer.Screen name="IsVegan" component={IsVegan} />
-                    </>
-                )
-            }
-        </Drawer.Navigator>
+            <Drawer.Navigator initialRouteName={"Home"} drawerContent={props => <SideMenu props={props} userLogged={userLogged}/>}>
+                {
+                    userLogged ? (
+                        <>
+                            <Drawer.Screen name="Home" component={Home}/>
+                            <Drawer.Screen name="IsVegan" component={IsVegan} />
+                            <Drawer.Screen name="AddProduct" component={AddProduct} />
+                        </>
+                    ) : (
+                        <>
+                            <Drawer.Screen name="Home" component={Home}/>
+                            <Drawer.Screen name="Login" component={Login} />
+                            <Drawer.Screen name="Register" component={Register} />
+                            <Drawer.Screen name="IsVegan" component={IsVegan} />
+                        </>
+                    )
+                }
+            </Drawer.Navigator>
     );
 }
 
@@ -106,7 +109,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
     isLoggedInChange,
     setUserInformation,
-    fetchProducts,
     fetchSupermarkets
 }
 

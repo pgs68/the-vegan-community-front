@@ -16,13 +16,33 @@ const TypeActionsCrud = {
     FETCH_PRODUCTS: 'FETCH_PRODUCTS',
     CHANGE_PRODUCT_INFO: 'CHANGE_PRODUCT_INFO',
     FETCH_PHOTO_PRODUCTS: 'FETCH_PHOTO_PRODUCTS',
-    FETCH_SUPERMARKETS: 'FETCH_SUPERMARKETS',
-    POST_PHOTO_PRODUCT: 'POST_PHOTO_PRODUCT'
+    FETCH_SUPERMARKETS: 'FETCH_SUPERMARKETS'
 }
 
-const createProduct = (product) => ({
+const transformProductObject = (producto, currentUser) => {
+    const precio = (Math.round(Number(producto.precio) * 100) / 100).toFixed(2)
+    return {
+        nombre: producto.nombre,
+        supermercados: producto.supermercado,
+        fotoPrincipal: producto.fotoGeneral,
+        precio: Number(precio), 
+        valoracion: 5,
+        vegano: producto.vegano,
+        vegetariano: producto.vegetariano,
+        alergenos: [],
+        fechaPublicacion: firebase.firestore.Timestamp.fromDate(new Date()),
+        vecesVisto: 0,
+        detalles: {
+            fotoIngredientes: producto.fotoIngredientes,
+            autor: currentUser.nombreUsuario,
+            imagenAutor: currentUser.imagenUsuario
+        }
+    }
+}
+
+const createProduct = (producto, usuario) => ({
     type: TypeActionsCrud.CREATE_PRODUCT,
-    payload: api().post('/productos')
+    payload: firebase.firestore().collection("productos").doc(producto.codigoBarras).set(transformProductObject(producto, usuario))
 })
 
 const fetchProducts = () => ({
@@ -48,12 +68,6 @@ const fetchSupermarkets = () => ({
     payload: firebase.firestore().collection("supermercados").get()
 })
 
-const postPhotoProduct = (nombreImagen, blob) => ({
-    type: TypeActionsCrud.POST_PHOTO_PRODUCT,
-    payload: firebase.storage().ref('productos/' + nombreImagen).put(blob).then(function(snapshot){
-        snapshot.ref.getDownloadURL()
-    })
-})
 
 export {
     TypeActionsCrud,
@@ -61,6 +75,5 @@ export {
     fetchProducts,
     changeProductFormInfo,
     fetchPhotoProduct,
-    fetchSupermarkets,
-    postPhotoProduct
+    fetchSupermarkets
 }

@@ -1,15 +1,21 @@
+//Utilities
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
-import { View, ScrollView } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 
+//Library components
+import { View, ScrollView } from 'react-native';
+import { Card, Button } from 'react-native-elements'
+
+//Own components
 import Header from '../../components/Header'
 import CustomInput from '../../components/FormComponents/CustomInput'
 import ErrorMessage from '../../components/ErrorMessage'
-import { login } from '../../common/utilities/firebaseFunctions'
-import { Card, Button } from 'react-native-elements'
-import { setUserInformation } from '../../actions/user'
-
 import styles from '../../styles/commonStyles'
+
+//Actions and functions
+import { login } from '../../common/utilities/firebaseFunctions'
+import { setUserInformation } from '../../actions/user'
 
 
 const Login = ({
@@ -24,6 +30,20 @@ const Login = ({
     });  
 
     const [error, setError] = useState(null)
+
+    useFocusEffect(
+        React.useCallback(() => {
+            //ComponentWillMount
+            return () => {
+                //ComponentWillUnmount
+                setError(null)
+                setUser({
+                    email: '',
+                    password: ''
+                })
+            }
+        }, [])
+    )
 
     useEffect(() => {
          if(userLogged){
