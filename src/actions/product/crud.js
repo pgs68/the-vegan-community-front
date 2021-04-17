@@ -16,7 +16,9 @@ const TypeActionsCrud = {
     FETCH_PRODUCTS: 'FETCH_PRODUCTS',
     CHANGE_PRODUCT_INFO: 'CHANGE_PRODUCT_INFO',
     FETCH_PHOTO_PRODUCTS: 'FETCH_PHOTO_PRODUCTS',
-    FETCH_SUPERMARKETS: 'FETCH_SUPERMARKETS'
+    FETCH_SUPERMARKETS: 'FETCH_SUPERMARKETS',
+    SET_FILTERS: 'SET_FILTERS',
+    CLEAN_FILTERS: 'CLEAN_FILTERS'
 }
 
 const transformProductObject = (producto, currentUser) => {
@@ -45,10 +47,17 @@ const createProduct = (producto, usuario) => ({
     payload: firebase.firestore().collection("productos").doc(producto.codigoBarras).set(transformProductObject(producto, usuario))
 })
 
-const fetchProducts = () => ({
-    type: TypeActionsCrud.FETCH_PRODUCTS,
-    payload: firebase.firestore().collection("productos").get()
-})
+const fetchProducts = (filtros) => {
+    var query = firebase.firestore().collection("productos")
+    if(filtros.supermercado !== ''){
+        query = query.where("supermercados", "array-contains", filtros.supermercado)
+    }
+    return {
+        type: TypeActionsCrud.FETCH_PRODUCTS,
+        payload: query.get()
+    }
+}
+
 
 const changeProductFormInfo = (id, value) => ({
     type: TypeActionsCrud.CHANGE_PRODUCT_INFO,
@@ -68,6 +77,17 @@ const fetchSupermarkets = () => ({
     payload: firebase.firestore().collection("supermercados").get()
 })
 
+const setFilters = (filters) => ({
+    type: TypeActionsCrud.SET_FILTERS,
+    payload: {
+        filters
+    }
+})
+
+const cleanFilters = () => ({
+    type: TypeActionsCrud.CLEAN_FILTERS,
+})
+
 
 export {
     TypeActionsCrud,
@@ -75,5 +95,7 @@ export {
     fetchProducts,
     changeProductFormInfo,
     fetchPhotoProduct,
-    fetchSupermarkets
+    fetchSupermarkets,
+    setFilters,
+    cleanFilters
 }
