@@ -1,10 +1,16 @@
 import { Actions } from '../../actions/product'
 import { fullfilled, rejected, pending } from '../utils'
-import { getProductPhoto } from '../../common/utilities/firebaseFunctions'
 
-const createProductFullFilled = (state, { payload }) => ({
-    ...state
-})
+const createProductFullFilled = (state, { payload }) => {
+    console.log(payload)
+    return {
+        ...state,
+        notification: {
+            show: true,
+            message: 'Producto creado correctamente'
+        }
+    }
+}
 
 const createProductRejected = state => ({
     ...state
@@ -66,6 +72,32 @@ const fetchPhotoProductRejected = (state, {payload}) => {
     }
 }
 
+const fetchSupermarketsFullfilled = (state, {payload}) => {
+    var supermercados = []
+    if(payload.docs.length){
+        payload.docs.forEach((doc) => {
+            var supermercado = doc.data()
+            supermercados.push(supermercado)
+        })
+        return {
+            ...state,
+            supermercados: supermercados
+        }
+    } else {
+        return {
+            ...state,
+            error: payload
+        }
+    }
+}
+
+const fetchSupermarketsRejected = (state, {payload}) => ({
+    ...state,
+    error: payload
+})
+
+
+
 const Crud = {
     [fullfilled(Actions.CREATE_PRODUCT)]: createProductFullFilled,
     [rejected(Actions.CREATE_PRODUCT)]: createProductRejected,
@@ -74,7 +106,9 @@ const Crud = {
     [rejected(Actions.FETCH_PRODUCTS)]: fetchProductsRejected,
     [Actions.CHANGE_PRODUCT_INFO]: changeProductFormInfo,
     [fullfilled(Actions.FETCH_PHOTO_PRODUCTS)]: fetchPhotoProductFullFilled,
-    [rejected(Actions.FETCH_PHOTO_PRODUCTS)]: fetchPhotoProductRejected
+    [rejected(Actions.FETCH_PHOTO_PRODUCTS)]: fetchPhotoProductRejected,
+    [fullfilled(Actions.FETCH_SUPERMARKETS)]: fetchSupermarketsFullfilled,
+    [rejected(Actions.FETCH_SUPERMARKETS)]: fetchSupermarketsRejected
 }
 
 export default Crud

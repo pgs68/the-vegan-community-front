@@ -1,86 +1,62 @@
+//Utilities
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from "prop-types";
-import { fetchProducts, fetchPhotoProduct } from '../../actions/product'
-import { Text } from 'react-native';
-import { View } from 'react-native';
-import { Button } from 'react-native'
-import { ActivityIndicator } from 'react-native';
-import { Image } from 'react-native-elements';
-import { Icon } from 'react-native-elements';
+import { useFocusEffect } from '@react-navigation/native';
 
+//Library components
+import { View, ScrollView, ActivityIndicator } from 'react-native';
+
+//Own components
 import Header from '../../components/Header'
 import styles from './styles'
+import ProductListItem from '../../components/ProductListItem'
+
+//Actions and functions
+import { fetchProducts } from '../../actions/product'
 
 const Home = ({
     navigation,
-    isLoggedIn,
-    currentUser,
     productos,
+    fetchProducts
 }) => {
+
+    useFocusEffect(
+        React.useCallback(() => {
+            //ComponentWillMount
+            fetchProducts()
+            return () => {
+                //ComponentWillUnmount
+                
+            }
+        }, [])
+    )
         
     return (
-        <View>
+        <View style={{flex: 1}}>
             <Header navigation={navigation} />
-            {isLoggedIn ? 
-                <Text>Bienvenido {currentUser.nombreCompleto}</Text>
-                :
-                <Text>No estás logueado</Text>
-            }
-            {
+            <ScrollView>
                 <View style={styles.productsList}>
                     {
                         productos.map(p => {
                             return (
-                                <View style={styles.productCard}>
-                                    <Image 
-                                        source={{ uri: p.fotoPrincipal }}
-                                        style={{ width: 200, height: 200 }}
-                                        PlaceholderContent={<ActivityIndicator />}
-                                    />
-                                    <View style={styles.productDetails}>
-                                        <View style={styles.productRowDetails}>
-                                            <Text style={{fontWeight: '700'}}>{p.nombre}</Text>
-                                            <Text>{p.precio}€</Text>
-                                        </View>
-                                        <View style={styles.productRowDetails}>
-                                            <Text>{p.supermercados[0]}</Text>
-                                            <View style={styles.productRating}>
-                                                <Text>{p.valoracion}</Text>
-                                                <Icon name='star-o' type='font-awesome' color='#efdf74'/>
-                                                {
-                                                    /* Cuando se implementen las votaciones, y el usuario haya votado el producto, se usará este icono:
-                                                        <Icon name='star' type='font-awesome'/>
-                                                    */
-                                                }
-                                            </View>
-                                            
-                                        </View>
-                                        <View style={styles.productButton}>
-                                            <Button 
-                                                title='Ver detalles'
-                                            />
-                                        </View>
-                                    </View>
-                                </View>
+                                <ProductListItem product={p}/>
                             )                
                         })
                     }
                 </View>
-            }
+            </ScrollView>
         </View>
     )
 }
 
 const mapStateToProps = state => ({
     productos: state.product.productos,
-    loadingProductos: state.product.productosIsLoading,
-    isLoggedIn: state.user.isLoggedIn,
-    currentUser: state.user.currentUser
+    loadingProductos: state.product.productosIsLoading
 })
 
 const mapDispatchToProps = {
-
+    fetchProducts
 }
 
 const HomeConnected = connect(mapStateToProps, mapDispatchToProps)(Home)

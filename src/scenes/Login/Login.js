@@ -1,15 +1,21 @@
+//Utilities
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
-import { View } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 
+//Library components
+import { View, ScrollView } from 'react-native';
+import { Card, Button } from 'react-native-elements'
+
+//Own components
 import Header from '../../components/Header'
 import CustomInput from '../../components/FormComponents/CustomInput'
 import ErrorMessage from '../../components/ErrorMessage'
-import { login } from '../../common/utilities/firebaseFunctions'
-import { Card, Button } from 'react-native-elements'
-import { setUserInformation } from '../../actions/user'
-
 import styles from '../../styles/commonStyles'
+
+//Actions and functions
+import { login } from '../../common/utilities/firebaseFunctions'
+import { setUserInformation } from '../../actions/user'
 
 
 const Login = ({
@@ -25,6 +31,20 @@ const Login = ({
 
     const [error, setError] = useState(null)
 
+    useFocusEffect(
+        React.useCallback(() => {
+            //ComponentWillMount
+            return () => {
+                //ComponentWillUnmount
+                setError(null)
+                setUser({
+                    email: '',
+                    password: ''
+                })
+            }
+        }, [])
+    )
+
     useEffect(() => {
          if(userLogged){
             navigation.navigate('Home')
@@ -32,46 +52,48 @@ const Login = ({
     }, [])
 
     return (
-        <View>
+        <View style={{flex: 1}}>
             <Header navigation={navigation} />
-            <View style={styles.body}>
-                <Card containerStyle={styles.mainCard}>
-                    <Card.Title>Iniciar sesión</Card.Title>
-                    <Card.Divider/>
-                        <CustomInput
-                            id={'email'}
-                            changeFunction={setUser}
-                            formObject={user} 
-                            placeholder={'Correo electrónico'}
-                        />
-                        <CustomInput
-                            id={'password'}
-                            changeFunction={setUser}
-                            formObject={user}  
-                            placeholder={'Contraseña'}
-                            isPasswordInput={true}
-                        />
-                        {
-                            error && 
-                            <ErrorMessage message={error.message} />
-                        }
-                        <Button 
-                            title='Iniciar sesión'
-                            type='outline'
-                            onPress={() =>{
-                                login(user, navigation, setError)
-                                setUserInformation('TngQoo9FLbh5BvVSPhocoil2APH2')
-                            }}
-                            disabled={user.email === '' || user.password === ''} 
-                        />
-                        <Button 
-                            title='Registrarse'
-                            type='clear'
-                            titleStyle={styles.secondaryButtonTitle}
-                            onPress={() => navigation.navigate('Register')}
-                        />
-                </Card>
-            </View>
+            <ScrollView>
+                <View style={styles.body}>
+                    <Card containerStyle={styles.mainCard}>
+                        <Card.Title>Iniciar sesión</Card.Title>
+                        <Card.Divider/>
+                            <CustomInput
+                                id={'email'}
+                                changeFunction={setUser}
+                                formObject={user} 
+                                placeholder={'Correo electrónico'}
+                            />
+                            <CustomInput
+                                id={'password'}
+                                changeFunction={setUser}
+                                formObject={user}  
+                                placeholder={'Contraseña'}
+                                isPasswordInput={true}
+                            />
+                            {
+                                error && 
+                                <ErrorMessage message={error.message} />
+                            }
+                            <Button 
+                                title='Iniciar sesión'
+                                type='outline'
+                                onPress={() =>{
+                                    login(user, navigation, setError)
+                                    setUserInformation('TngQoo9FLbh5BvVSPhocoil2APH2')
+                                }}
+                                disabled={user.email === '' || user.password === ''} 
+                            />
+                            <Button 
+                                title='Registrarse'
+                                type='clear'
+                                titleStyle={styles.secondaryButtonTitle}
+                                onPress={() => navigation.navigate('Register')}
+                            />
+                    </Card>
+                </View>
+            </ScrollView>
         </View>
     )
 }

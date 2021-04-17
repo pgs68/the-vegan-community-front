@@ -15,12 +15,34 @@ const TypeActionsCrud = {
     CREATE_PRODUCT: 'CREATE_PRODUCT',
     FETCH_PRODUCTS: 'FETCH_PRODUCTS',
     CHANGE_PRODUCT_INFO: 'CHANGE_PRODUCT_INFO',
-    FETCH_PHOTO_PRODUCTS: 'FETCH_PHOTO_PRODUCTS'
+    FETCH_PHOTO_PRODUCTS: 'FETCH_PHOTO_PRODUCTS',
+    FETCH_SUPERMARKETS: 'FETCH_SUPERMARKETS'
 }
 
-const createProduct = (product) => ({
+const transformProductObject = (producto, currentUser) => {
+    const precio = (Math.round(Number(producto.precio) * 100) / 100).toFixed(2)
+    return {
+        nombre: producto.nombre,
+        supermercados: producto.supermercado,
+        fotoPrincipal: producto.fotoGeneral,
+        precio: Number(precio), 
+        valoracion: 5,
+        vegano: producto.vegano,
+        vegetariano: producto.vegetariano,
+        alergenos: [],
+        fechaPublicacion: firebase.firestore.Timestamp.fromDate(new Date()),
+        vecesVisto: 0,
+        detalles: {
+            fotoIngredientes: producto.fotoIngredientes,
+            autor: currentUser.nombreUsuario,
+            imagenAutor: currentUser.imagenUsuario
+        }
+    }
+}
+
+const createProduct = (producto, usuario) => ({
     type: TypeActionsCrud.CREATE_PRODUCT,
-    payload: api().post('/productos')
+    payload: firebase.firestore().collection("productos").doc(producto.codigoBarras).set(transformProductObject(producto, usuario))
 })
 
 const fetchProducts = () => ({
@@ -41,10 +63,17 @@ const fetchPhotoProduct = (id, photoName) => ({
     payload: firebase.storage().ref().child('productos/' + photoName).getDownloadURL()
 })
 
+const fetchSupermarkets = () => ({
+    type: TypeActionsCrud.FETCH_SUPERMARKETS,
+    payload: firebase.firestore().collection("supermercados").get()
+})
+
+
 export {
     TypeActionsCrud,
     createProduct,
     fetchProducts,
     changeProductFormInfo,
-    fetchPhotoProduct
+    fetchPhotoProduct,
+    fetchSupermarkets
 }

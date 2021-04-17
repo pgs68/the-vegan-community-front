@@ -9,7 +9,12 @@ const initialState = {
     },
     productos: [],
     productosIsLoading: false,
-    error: false
+    error: false,
+    supermercados: [],
+    notification: {
+        show: false,
+        message: ''
+    }
 }
 
 const Managers = {

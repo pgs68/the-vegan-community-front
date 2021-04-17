@@ -9,7 +9,8 @@ const CustomInput = ({
     id,
     formObject,
     defaultValue,
-    isPasswordInput
+    isPasswordInput,
+    type = 'text'
 }) => {
     //Posible mejora visual apuntada en trello
     return(
@@ -18,6 +19,7 @@ const CustomInput = ({
             onChangeText={value => changeFormInfo(formObject, id, value, changeFunction)}
             secureTextEntry={isPasswordInput}
             value={defaultValue}
+            keyboardType={type === 'number' ? 'numeric' : 'default'}
         />
     )
 }

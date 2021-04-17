@@ -3,7 +3,8 @@ import {
     createProduct,
     fetchProducts,
     changeProductFormInfo,
-    fetchPhotoProduct
+    fetchPhotoProduct,
+    fetchSupermarkets
 } from './crud'
 
 const Actions = {
@@ -15,5 +16,6 @@ export {
     createProduct,
     fetchProducts,
     changeProductFormInfo,
-    fetchPhotoProduct
+    fetchPhotoProduct,
+    fetchSupermarkets
 }

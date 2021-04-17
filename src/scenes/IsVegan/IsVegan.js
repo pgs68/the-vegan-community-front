@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
-import { Text, View } from 'react-native';
+import { Text, View, ScrollView } from 'react-native';
 
 import Header from '../../components/Header'
 
 const IsVegan = ({navigation}) => {
     return (
-        <View>
+        <View style={{flex: 1}}>
             <Header navigation={navigation} />
-            <Text>Esta es la página para ver si un producto es vegano o no</Text>
+            <ScrollView>
+                <Text>Esta es la página para ver si un producto es vegano o no</Text>
+            </ScrollView>
         </View>
     )
 }
