@@ -6,37 +6,57 @@ import { useFocusEffect } from '@react-navigation/native';
 
 //Library components
 import { View, ScrollView, ActivityIndicator } from 'react-native';
+import { List } from 'react-native-paper';
+import { Icon } from 'react-native-elements';
 
 //Own components
 import Header from '../../components/Header'
 import styles from './styles'
 import ProductListItem from '../../components/ProductListItem'
+import FiltersAccordion from '../../components/FiltersAccordion'
 
 //Actions and functions
-import { fetchProducts } from '../../actions/product'
+import { fetchProducts, setFilters, cleanFilters } from '../../actions/product'
 
 const Home = ({
     navigation,
     productos,
-    fetchProducts
+    filtros,
+    setFilters,
+    cleanFilters,
+    fetchProducts,
+    supermercados
 }) => {
+    const [expandedFilters, setExpandedFilters] = React.useState(false);
 
     useFocusEffect(
         React.useCallback(() => {
             //ComponentWillMount
-            fetchProducts()
+            fetchProducts(filtros)
             return () => {
                 //ComponentWillUnmount
-                
+                setExpandedFilters(false)
+                cleanFilters()
             }
         }, [])
     )
+
+    useEffect(() => {
+        fetchProducts(filtros)
+    }, [filtros])
         
     return (
         <View style={{flex: 1}}>
             <Header navigation={navigation} />
             <ScrollView>
                 <View style={styles.productsList}>
+                    <FiltersAccordion 
+                        expandedFilters={expandedFilters} 
+                        setExpandedFilters={setExpandedFilters}
+                        filtros={filtros}
+                        supermercados={supermercados}
+                        setFiltros={setFilters}
+                    />
                     {
                         productos.map(p => {
                             return (
@@ -52,11 +72,15 @@ const Home = ({
 
 const mapStateToProps = state => ({
     productos: state.product.productos,
-    loadingProductos: state.product.productosIsLoading
+    loadingProductos: state.product.productosIsLoading,
+    filtros: state.product.filtros,
+    supermercados: state.product.supermercados
 })
 
 const mapDispatchToProps = {
-    fetchProducts
+    fetchProducts,
+    setFilters,
+    cleanFilters
 }
 
 const HomeConnected = connect(mapStateToProps, mapDispatchToProps)(Home)

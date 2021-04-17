@@ -1,5 +1,6 @@
 import { Actions } from '../../actions/product'
 import { fullfilled, rejected, pending } from '../utils'
+import { initialFilters } from './utils'
 
 const createProductFullFilled = (state, { payload }) => {
     console.log(payload)
@@ -96,6 +97,15 @@ const fetchSupermarketsRejected = (state, {payload}) => ({
     error: payload
 })
 
+const setFilters = (state, {payload}) => ({
+    ...state,
+    filtros: payload.filters
+})
+
+const cleanFilters = (state) => ({
+    ...state,
+    filtros: initialFilters
+})
 
 
 const Crud = {
@@ -108,7 +118,9 @@ const Crud = {
     [fullfilled(Actions.FETCH_PHOTO_PRODUCTS)]: fetchPhotoProductFullFilled,
     [rejected(Actions.FETCH_PHOTO_PRODUCTS)]: fetchPhotoProductRejected,
     [fullfilled(Actions.FETCH_SUPERMARKETS)]: fetchSupermarketsFullfilled,
-    [rejected(Actions.FETCH_SUPERMARKETS)]: fetchSupermarketsRejected
+    [rejected(Actions.FETCH_SUPERMARKETS)]: fetchSupermarketsRejected,
+    [Actions.SET_FILTERS]: setFilters,
+    [Actions.CLEAN_FILTERS]: cleanFilters
 }
 
 export default Crud

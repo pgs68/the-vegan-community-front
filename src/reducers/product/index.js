@@ -1,4 +1,5 @@
 import Crud from './crud'
+import { initialFilters } from './utils'
 
 const initialState = {
     producto: {
@@ -14,7 +15,8 @@ const initialState = {
     notification: {
         show: false,
         message: ''
-    }
+    },
+    filtros: initialFilters
 }
 
 const Managers = {
