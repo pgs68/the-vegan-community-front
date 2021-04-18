@@ -17,6 +17,7 @@ import Register from './scenes/Register'
 import IsVegan from './scenes/IsVegan'
 import AddProduct from './scenes/AddProduct'
 import ListaSupermercados from './scenes/ListaSupermercados'
+import DetailsProduct from './scenes/DetailsProduct'
 
 //Actions and functions
 import { isLoggedInChange, setUserInformation } from './actions/user'
@@ -95,6 +96,7 @@ const MainPage = ({
                             <Drawer.Screen name="IsVegan" component={IsVegan} />
                             <Drawer.Screen name="AddProduct" component={AddProduct} />
                             <Drawer.Screen name="ListaSupermercados" component={ListaSupermercados} />
+                            <Drawer.Screen name="DetailsProduct" component={DetailsProduct} />
                         </>
                     ) : (
                         <>
@@ -103,6 +105,7 @@ const MainPage = ({
                             <Drawer.Screen name="Register" component={Register} />
                             <Drawer.Screen name="IsVegan" component={IsVegan} />
                             <Drawer.Screen name="ListaSupermercados" component={ListaSupermercados} />
+                            <Drawer.Screen name="DetailsProduct" component={DetailsProduct} />
                         </>
                     )
                 }

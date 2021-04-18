@@ -3,11 +3,28 @@ import { Card, Paragraph, Button  } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 
-const ProductListItem = ({product}) => {
+
+const getAllSupermarkets = (supermarkets) => {
+    var supermarketsText = ''
+    supermarkets.map(s => {
+        if(supermarkets.indexOf(s) === (supermarkets.length - 1)){
+            supermarketsText += s
+        } else {
+            supermarketsText += (s + ', ')
+        }
+    })
+    return supermarketsText
+}
+
+const ProductListItem = ({
+    product,
+    navigation,
+    fetchProduct
+}) => {
     return (
         <Card style={styles.card}>
             <Card.Cover source={{ uri: product.fotoPrincipal }} />
-            <Card.Title title={product.nombre} subtitle={product.supermercados[0]}/>
+            <Card.Title title={product.nombre} subtitle={getAllSupermarkets(product.supermercados)}/>
             <Card.Content style={styles.productRowDetails}>
                 <Paragraph>{product.precio}€</Paragraph>
                 <View style={styles.productRating}>
@@ -21,7 +38,12 @@ const ProductListItem = ({product}) => {
                 </View>
             </Card.Content>
             <Card.Actions>
-                    <Button>Ver detalles</Button>
+                    <Button 
+                        onPress={() => {
+                            fetchProduct(product.codebar)
+                            navigation.navigate('DetailsProduct')
+                        }}
+                    >Ver detalles</Button>
             </Card.Actions>
         </Card>
     )

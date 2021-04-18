@@ -14,7 +14,12 @@ import ProductListItem from '../../components/ProductListItem'
 import FiltersAccordion from '../../components/FiltersAccordion'
 
 //Actions and functions
-import { fetchProducts, setFilters, cleanFilters } from '../../actions/product'
+import { 
+    fetchProducts, 
+    setFilters, 
+    cleanFilters,
+    fetchProductByCodebar 
+} from '../../actions/product'
 
 const Home = ({
     navigation,
@@ -23,7 +28,8 @@ const Home = ({
     setFilters,
     cleanFilters,
     fetchProducts,
-    supermercados
+    supermercados,
+    fetchProductByCodebar
 }) => {
     const [expandedFilters, setExpandedFilters] = React.useState(false);
 
@@ -58,7 +64,11 @@ const Home = ({
                     {
                         productos.map(p => {
                             return (
-                                <ProductListItem product={p}/>
+                                <ProductListItem 
+                                    product={p} 
+                                    navigation={navigation}
+                                    fetchProduct={fetchProductByCodebar}
+                                />
                             )                
                         })
                     }
@@ -78,7 +88,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
     fetchProducts,
     setFilters,
-    cleanFilters
+    cleanFilters,
+    fetchProductByCodebar
 }
 
 const HomeConnected = connect(mapStateToProps, mapDispatchToProps)(Home)

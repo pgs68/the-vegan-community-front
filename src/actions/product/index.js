@@ -2,11 +2,11 @@ import {
     TypeActionsCrud,
     createProduct,
     fetchProducts,
-    changeProductFormInfo,
     fetchPhotoProduct,
     fetchSupermarkets,
     setFilters,
-    cleanFilters
+    cleanFilters,
+    fetchProductByCodebar
 } from './crud'
 
 const Actions = {
@@ -17,9 +17,9 @@ export {
     Actions,
     createProduct,
     fetchProducts,
-    changeProductFormInfo,
     fetchPhotoProduct,
     fetchSupermarkets,
     setFilters,
-    cleanFilters
+    cleanFilters,
+    fetchProductByCodebar
 }
