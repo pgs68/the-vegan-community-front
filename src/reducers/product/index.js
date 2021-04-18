@@ -6,7 +6,9 @@ const initialState = {
         nombre: '',
         precio: '',
         codebar: '',
-        vegano: false
+        vegano: false,
+        detalles: {},
+        supermercados: []
     },
     productos: [],
     productosIsLoading: false,

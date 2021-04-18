@@ -50,10 +50,6 @@ const fetchProductsRejected = state => ({
     productosIsLoading: false
 })
 
-const changeProductFormInfo = (state, { payload }) => {
-    state.product[payload.id] = payload.value
-    return {...state}
-}
 
 const fetchPhotoProductFullFilled = (state, {payload}) => {
     var productos = state.productos
@@ -107,6 +103,18 @@ const cleanFilters = (state) => ({
     filtros: initialFilters
 })
 
+const fetchProductByCodebarFullFilled = (state, {payload}) => {
+    return {
+        ...state,
+        producto: payload.data()
+    }
+}
+
+const fetchProductByCodebarRejected = (state, {payload}) => ({
+    ...state,
+    error: payload
+})
+
 
 const Crud = {
     [fullfilled(Actions.CREATE_PRODUCT)]: createProductFullFilled,
@@ -114,13 +122,14 @@ const Crud = {
     [pending(Actions.FETCH_PRODUCTS)]: fetchProductosPending,
     [fullfilled(Actions.FETCH_PRODUCTS)]: fetchProductsFullFilled,
     [rejected(Actions.FETCH_PRODUCTS)]: fetchProductsRejected,
-    [Actions.CHANGE_PRODUCT_INFO]: changeProductFormInfo,
     [fullfilled(Actions.FETCH_PHOTO_PRODUCTS)]: fetchPhotoProductFullFilled,
     [rejected(Actions.FETCH_PHOTO_PRODUCTS)]: fetchPhotoProductRejected,
     [fullfilled(Actions.FETCH_SUPERMARKETS)]: fetchSupermarketsFullfilled,
     [rejected(Actions.FETCH_SUPERMARKETS)]: fetchSupermarketsRejected,
     [Actions.SET_FILTERS]: setFilters,
-    [Actions.CLEAN_FILTERS]: cleanFilters
+    [Actions.CLEAN_FILTERS]: cleanFilters,
+    [fullfilled(Actions.FETCH_PRODUCT_BY_CODEBAR)]: fetchProductByCodebarFullFilled,
+    [rejected(Actions.FETCH_PRODUCT_BY_CODEBAR)]: fetchProductByCodebarRejected
 }
 
 export default Crud

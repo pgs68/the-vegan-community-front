@@ -18,12 +18,14 @@ const TypeActionsCrud = {
     FETCH_PHOTO_PRODUCTS: 'FETCH_PHOTO_PRODUCTS',
     FETCH_SUPERMARKETS: 'FETCH_SUPERMARKETS',
     SET_FILTERS: 'SET_FILTERS',
-    CLEAN_FILTERS: 'CLEAN_FILTERS'
+    CLEAN_FILTERS: 'CLEAN_FILTERS',
+    FETCH_PRODUCT_BY_CODEBAR: 'FETCH_PRODUCT_BY_CODEBAR'
 }
 
 const transformProductObject = (producto, currentUser) => {
     const precio = (Math.round(Number(producto.precio) * 100) / 100).toFixed(2)
     return {
+        codebar: producto.codigoBarras,
         nombre: producto.nombre,
         supermercados: producto.supermercado,
         fotoPrincipal: producto.fotoGeneral,
@@ -58,15 +60,6 @@ const fetchProducts = (filtros) => {
     }
 }
 
-
-const changeProductFormInfo = (id, value) => ({
-    type: TypeActionsCrud.CHANGE_PRODUCT_INFO,
-    payload: {
-        id,
-        value
-    }
-})
-
 const fetchPhotoProduct = (id, photoName) => ({
     type: TypeActionsCrud.FETCH_PHOTO_PRODUCTS,
     payload: firebase.storage().ref().child('productos/' + photoName).getDownloadURL()
@@ -88,14 +81,19 @@ const cleanFilters = () => ({
     type: TypeActionsCrud.CLEAN_FILTERS,
 })
 
+const fetchProductByCodebar = (codebar) => ({
+    type: TypeActionsCrud.FETCH_PRODUCT_BY_CODEBAR,
+    payload: firebase.firestore().collection("productos").doc(codebar).get()
+})
+
 
 export {
     TypeActionsCrud,
     createProduct,
     fetchProducts,
-    changeProductFormInfo,
     fetchPhotoProduct,
     fetchSupermarkets,
     setFilters,
-    cleanFilters
+    cleanFilters,
+    fetchProductByCodebar
 }
