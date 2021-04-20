@@ -4,11 +4,18 @@ import 'firebase/firestore'
 import 'firebase/storage'
 
 const baseUrl = 'http://localhost:5000/the-vegan-community-api/us-central1/app/api'
+const urlOFF = 'https://world.openfoodfacts.org/api/v0/product/'
 
-const api = token =>
+const apiBack = token =>
     new Api({
         baseUrl: baseUrl,
         defaultOptions: { headers: { Authorization: `Bearer ${token}` } }
+    })
+
+const apiOFF = () =>
+    new Api({
+        baseUrl: urlOFF,
+        defaultOptions: {  }
     })
 
 const TypeActionsCrud = {
@@ -85,7 +92,6 @@ const fetchProductByCodebar = (codebar) => ({
     type: TypeActionsCrud.FETCH_PRODUCT_BY_CODEBAR,
     payload: firebase.firestore().collection("productos").doc(codebar).get()
 })
-
 
 export {
     TypeActionsCrud,

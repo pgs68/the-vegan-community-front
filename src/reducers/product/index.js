@@ -18,7 +18,16 @@ const initialState = {
         show: false,
         message: ''
     },
-    filtros: initialFilters
+    filtros: initialFilters,
+    productFromOFF: {
+        loading: false,
+        status: -1,
+        product_name_es: '',
+        product_name: '',
+        image_front_url: '',
+        ingredients: [],
+        vegano: null
+    }
 }
 
 const Managers = {
