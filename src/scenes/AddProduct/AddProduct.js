@@ -6,10 +6,9 @@ import { useFocusEffect } from '@react-navigation/native';
 
 //Library components
 import { Text, View, Platform, Dimensions, StyleSheet, Image, ScrollView } from 'react-native';
-import { Icon } from 'react-native-elements';
 import * as ImagePicker from 'expo-image-picker'
 import { BarCodeScanner } from 'expo-barcode-scanner'
-import { Card, Button } from 'react-native-elements'
+import { Card, Button, Icon } from 'react-native-elements'
 import DropDownPicker from 'react-native-dropdown-picker'
 
 //Own components

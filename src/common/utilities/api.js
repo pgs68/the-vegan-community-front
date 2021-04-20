@@ -15,7 +15,6 @@ export default class Api {
         }
         this.defaultOptions.headers = {
             Accept: appJson,
-            'Content-Type': appJson,
             ...options.defaultOptions.headers,
         }
     }
