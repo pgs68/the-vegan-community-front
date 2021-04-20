@@ -26,7 +26,8 @@ const TypeActionsCrud = {
     FETCH_SUPERMARKETS: 'FETCH_SUPERMARKETS',
     SET_FILTERS: 'SET_FILTERS',
     CLEAN_FILTERS: 'CLEAN_FILTERS',
-    FETCH_PRODUCT_BY_CODEBAR: 'FETCH_PRODUCT_BY_CODEBAR'
+    FETCH_PRODUCT_BY_CODEBAR: 'FETCH_PRODUCT_BY_CODEBAR',
+    GET_COMENTARIOS_FROM_PRODUCTO: 'GET_COMENTARIOS_FROM_PRODUCTO'
 }
 
 const transformProductObject = (producto, currentUser) => {
@@ -93,6 +94,11 @@ const fetchProductByCodebar = (codebar) => ({
     payload: firebase.firestore().collection("productos").doc(codebar).get()
 })
 
+const getComentariosFromProducto = (codebar) => ({
+    type: TypeActionsCrud.GET_COMENTARIOS_FROM_PRODUCTO,
+    payload: firebase.firestore().collection("productos/" + codebar + "/comentarios").get()
+})
+
 export {
     TypeActionsCrud,
     createProduct,
@@ -101,5 +107,6 @@ export {
     fetchSupermarkets,
     setFilters,
     cleanFilters,
-    fetchProductByCodebar
+    fetchProductByCodebar,
+    getComentariosFromProducto
 }

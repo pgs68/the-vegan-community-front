@@ -4,7 +4,16 @@ import { StyleSheet } from "react-native";
 export default StyleSheet.create({
     bodyDetails: {
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        marginBottom: 15
+    },
+    commentSection: {
+        display: 'flex',
+        flexDirection: 'column',
+        marginTop: 10
+    },
+    commentSectionTitle: {
+        backgroundColor: '#f2f2f2'
     },
     rowTitleDetails: {
         display: 'flex',
@@ -27,5 +36,9 @@ export default StyleSheet.create({
     row: {
         display: 'flex',
         flexDirection: 'row',
-    }
+    },
+    column: {
+        display: 'flex',
+        flexDirection: 'column'
+    },
 })

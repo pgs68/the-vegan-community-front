@@ -56,7 +56,10 @@ function SideMenu({props, userLogged}){
                 <DrawerItem 
                     label="Cerrar sesión"
                     icon={() => <Icon name='sign-out-alt' type='font-awesome-5'/>}
-                    onPress={() => logout(props.navigation, isLoggedInChange)}
+                    onPress={() => {
+                        logout(props.navigation, isLoggedInChange)
+                        props.navigation.navigate('Login')
+                    }}
                 />
             }
         </DrawerContentScrollView>

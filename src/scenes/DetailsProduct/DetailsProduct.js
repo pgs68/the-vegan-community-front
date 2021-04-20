@@ -9,7 +9,7 @@ import {
     Text,
     ScrollView,
 } from 'react-native';
-import { Icon } from 'react-native-elements';
+import { Icon, Card } from 'react-native-elements';
 import {
     Paragraph,
     Title,
@@ -20,6 +20,7 @@ import {
 import Header from '../../components/Header'
 import Carousel from '../../components/Carousel'
 import styles from './styles'
+import Comentario from '../../components/Comentario'
 
 //Actions and functions
 
@@ -52,7 +53,7 @@ const DetailsProduct = ({
     return (
         <View style={{flex: 1}}>
             <Header navigation={navigation} />
-            <ScrollView>
+            <ScrollView stickyHeaderIndices={[1]}>
                 <View style={styles.bodyDetails}>
                     <Carousel images={[producto.fotoPrincipal, producto.detalles.fotoIngredientes]}/>
                     <View style={styles.rowTitleDetails}>
@@ -78,6 +79,21 @@ const DetailsProduct = ({
                             <Paragraph>{producto.detalles.autor}</Paragraph>
                         </View>
                     </View>
+                </View>
+                <View style={styles.commentSectionTitle}>
+                    <Card.Divider style={{ marginBottom: 5 }} />
+                    <Text style={{ textAlign: 'center' }}>Comentarios</Text>
+                    <Card.Divider style={{ marginTop: 5, marginBottom: 0 }} />
+                </View>
+                <View style={styles.commentSection}>   
+                    {
+                        producto.detalles.comentarios && 
+                        producto.detalles.comentarios.map(comentario => {
+                            return (
+                                <Comentario comentario={comentario} />
+                            )
+                        })
+                    }
                 </View>
             </ScrollView>
         </View>

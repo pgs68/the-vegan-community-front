@@ -18,7 +18,8 @@ import {
     fetchProducts, 
     setFilters, 
     cleanFilters,
-    fetchProductByCodebar 
+    fetchProductByCodebar,
+    getComentariosFromProducto 
 } from '../../actions/product'
 
 const Home = ({
@@ -29,7 +30,8 @@ const Home = ({
     cleanFilters,
     fetchProducts,
     supermercados,
-    fetchProductByCodebar
+    fetchProductByCodebar,
+    getComentariosFromProducto
 }) => {
     const [expandedFilters, setExpandedFilters] = React.useState(false);
 
@@ -47,6 +49,11 @@ const Home = ({
     useEffect(() => {
         fetchProducts(filtros)
     }, [filtros])
+
+    async function fetchProduct(codebar){
+        await fetchProductByCodebar(codebar)
+        getComentariosFromProducto(codebar)
+    }
         
     return (
         <View style={{flex: 1}}>
@@ -67,7 +74,7 @@ const Home = ({
                                 <ProductListItem 
                                     product={p} 
                                     navigation={navigation}
-                                    fetchProduct={fetchProductByCodebar}
+                                    fetchProduct={fetchProduct}
                                 />
                             )                
                         })
@@ -89,7 +96,8 @@ const mapDispatchToProps = {
     fetchProducts,
     setFilters,
     cleanFilters,
-    fetchProductByCodebar
+    fetchProductByCodebar,
+    getComentariosFromProducto
 }
 
 const HomeConnected = connect(mapStateToProps, mapDispatchToProps)(Home)
