@@ -7,7 +7,8 @@ import {
     setFilters,
     cleanFilters,
     fetchProductByCodebar,
-    getComentariosFromProducto
+    getComentariosFromProducto,
+    postComentarioInProducto
 } from './crud'
 
 const Actions = {
@@ -23,5 +24,6 @@ export {
     setFilters,
     cleanFilters,
     fetchProductByCodebar,
-    getComentariosFromProducto
+    getComentariosFromProducto,
+    postComentarioInProducto
 }

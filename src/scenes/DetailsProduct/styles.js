@@ -15,6 +15,10 @@ export default StyleSheet.create({
     commentSectionTitle: {
         backgroundColor: '#f2f2f2'
     },
+    addCommentSection: {
+        borderTopColor: '#c3c3c3',
+        borderTopWidth: 1
+    },
     rowTitleDetails: {
         display: 'flex',
         flexDirection: 'row',

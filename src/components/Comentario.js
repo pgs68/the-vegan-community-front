@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
         marginBottom: 5
     },
     autor: {
-        fontWeight: 700
+        fontWeight: '700'
     },
     texto: {
         maxWidth: width - 70

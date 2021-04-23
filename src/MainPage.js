@@ -58,7 +58,6 @@ function SideMenu({props, userLogged}){
                     icon={() => <Icon name='sign-out-alt' type='font-awesome-5'/>}
                     onPress={() => {
                         logout(props.navigation, isLoggedInChange)
-                        props.navigation.navigate('Login')
                     }}
                 />
             }
@@ -91,7 +90,7 @@ const MainPage = ({
     }, [])
 
     return (
-            <Drawer.Navigator initialRouteName={"Home"} drawerContent={props => <SideMenu props={props} userLogged={userLogged}/>}>
+            <Drawer.Navigator initialRouteName={userLogged ? "Home" : "Login"} drawerContent={props => <SideMenu props={props} userLogged={userLogged}/>}>
                 {
                     userLogged ? (
                         <>

@@ -8,8 +8,9 @@ import {
     View,
     Text,
     ScrollView,
+    Dimensions
 } from 'react-native';
-import { Icon, Card } from 'react-native-elements';
+import { Icon, Card, Input, Button } from 'react-native-elements';
 import {
     Paragraph,
     Title,
@@ -23,6 +24,7 @@ import styles from './styles'
 import Comentario from '../../components/Comentario'
 
 //Actions and functions
+import { getComentariosFromProducto, postComentarioInProducto } from '../../actions/product'
 
 
 const getAllSupermarkets = (supermarkets) => {
@@ -37,13 +39,19 @@ const getAllSupermarkets = (supermarkets) => {
     return supermarketsText
 }
 
+const { width } = Dimensions.get('window');
 
 const DetailsProduct = ({
     navigation,
-    producto
+    producto,
+    postComentarioInProducto,
+    getComentariosFromProducto,
+    usuario,
+    isLoggedIn
 }) => {
 
     const [supermercados, setSupermercados] = useState('')
+    const [newComment, setNewComment] = useState('')
 
     useEffect(() => {
         setSupermercados(getAllSupermarkets(producto.supermercados))
@@ -96,17 +104,50 @@ const DetailsProduct = ({
                     }
                 </View>
             </ScrollView>
+            {
+                isLoggedIn &&
+                <View style={styles.addCommentSection}>
+                    <View style={styles.row}>
+                        <Input
+                            placeholder={'Comenta este producto'}
+                            value={newComment} 
+                            onChangeText={value => setNewComment(value)}
+                            containerStyle={{ width: width*0.75, marginTop: 5 }}
+                        />
+                        <Button 
+                            title='Enviar'
+                            type='outline'
+                            disabled={newComment === ''}
+                            onPress={() => {
+                                const comment = newComment.trimStart().trimEnd()
+                                setNewComment(comment)
+
+                                if(comment !== '')
+                                {
+                                    postComentarioInProducto(producto.codebar, comment, usuario)
+                                    getComentariosFromProducto(producto.codebar)
+                                    setNewComment('')
+                                }
+                            }}
+                            style={{ width: width*0.2, marginTop: 5 }}
+                        />
+                    </View>
+                </View>
+            }
         </View>
     )
 }
 
 
 const mapStateToProps = state => ({
-    producto: state.product.producto
+    producto: state.product.producto,
+    usuario: state.user.currentUser,
+    isLoggedIn: state.user.isLoggedIn
 })
 
 const mapDispatchToProps = {
-
+    postComentarioInProducto,
+    getComentariosFromProducto
 }
 
 const DetailsProductConnected = connect(mapStateToProps, mapDispatchToProps)(DetailsProduct)

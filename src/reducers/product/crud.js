@@ -140,6 +140,19 @@ const getComentariosFromProductoRejected = (state, {payload}) => ({
     ...state,
     error: payload
 })
+
+const postComentarioInProductoFullfilled = (state, {payload}) => {
+    return {
+        ...state
+    }
+}
+
+const postComentarioInProductoRejected = (state, {payload}) => {
+    return {
+        ...state,
+        error: payload
+    }
+}
     
 
 
@@ -159,7 +172,9 @@ const Crud = {
     [fullfilled(Actions.FETCH_PRODUCT_BY_CODEBAR)]: fetchProductByCodebarFullFilled,
     [rejected(Actions.FETCH_PRODUCT_BY_CODEBAR)]: fetchProductByCodebarRejected,
     [fullfilled(Actions.GET_COMENTARIOS_FROM_PRODUCTO)]: getComentariosFromProductoFullfilled,
-    [rejected(Actions.GET_COMENTARIOS_FROM_PRODUCTO)]: getComentariosFromProductoRejected
+    [rejected(Actions.GET_COMENTARIOS_FROM_PRODUCTO)]: getComentariosFromProductoRejected,
+    [fullfilled(Actions.POST_COMENTARIO_IN_PRODUCTO)]: postComentarioInProductoFullfilled,
+    [rejected(Actions.POST_COMENTARIO_IN_PRODUCTO)]: postComentarioInProductoRejected
 }
 
 export default Crud

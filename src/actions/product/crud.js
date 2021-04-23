@@ -27,7 +27,8 @@ const TypeActionsCrud = {
     SET_FILTERS: 'SET_FILTERS',
     CLEAN_FILTERS: 'CLEAN_FILTERS',
     FETCH_PRODUCT_BY_CODEBAR: 'FETCH_PRODUCT_BY_CODEBAR',
-    GET_COMENTARIOS_FROM_PRODUCTO: 'GET_COMENTARIOS_FROM_PRODUCTO'
+    GET_COMENTARIOS_FROM_PRODUCTO: 'GET_COMENTARIOS_FROM_PRODUCTO',
+    POST_COMENTARIO_IN_PRODUCTO: 'POST_COMENTARIO_IN_PRODUCTO'
 }
 
 const transformProductObject = (producto, currentUser) => {
@@ -96,7 +97,19 @@ const fetchProductByCodebar = (codebar) => ({
 
 const getComentariosFromProducto = (codebar) => ({
     type: TypeActionsCrud.GET_COMENTARIOS_FROM_PRODUCTO,
-    payload: firebase.firestore().collection("productos/" + codebar + "/comentarios").get()
+    payload: firebase.firestore().collection("productos/" + codebar + "/comentarios")
+                .orderBy('fecha', 'desc').get()
+})
+
+const postComentarioInProducto = (codebar, comentario, usuario) => ({
+    type: TypeActionsCrud.POST_COMENTARIO_IN_PRODUCTO,
+    payload: firebase.firestore().collection("productos/" + codebar + "/comentarios")
+                .add({
+                    autor: usuario.nombreUsuario,
+                    imagenAutor: usuario.imagenUsuario,
+                    fecha: firebase.firestore.Timestamp.fromDate(new Date()),
+                    texto: comentario
+                })
 })
 
 export {
@@ -108,5 +121,6 @@ export {
     setFilters,
     cleanFilters,
     fetchProductByCodebar,
-    getComentariosFromProducto
+    getComentariosFromProducto,
+    postComentarioInProducto
 }
