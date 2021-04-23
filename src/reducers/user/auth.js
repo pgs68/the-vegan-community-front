@@ -1,10 +1,21 @@
 import { Actions } from '../../actions/user'
 import { fullfilled, rejected, pending } from '../utils'
 
-const isLoggedInChange = (state, { payload }) => ({
-    ...state,
-    isLoggedIn: payload.value
-})
+const isLoggedInChange = (state, { payload }) => {
+    if(payload.value){
+        return {
+            ...state,
+            isLoggedIn: payload.value
+        }
+    } else {
+        return {
+            ...state,
+            isLoggedIn: payload.value,
+            currentUser: {}
+        }
+    }
+    
+}
 
 const setUserInformationFullFilled = (state, { payload }) => {
     if(payload.docs.length){

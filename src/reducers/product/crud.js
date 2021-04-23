@@ -115,6 +115,47 @@ const fetchProductByCodebarRejected = (state, {payload}) => ({
     error: payload
 })
 
+const getComentariosFromProductoFullfilled = (state, {payload}) => {
+    var comentarios = []
+    if(payload.docs.length){
+        payload.docs.forEach((doc) => {
+            var comentario = doc.data()
+            comentarios.push(comentario)
+        })
+    } 
+
+    return {
+        ...state,
+        producto: {
+            ...state.producto,
+            detalles: {
+                ...state.producto.detalles,
+                comentarios: comentarios
+            }
+        }
+    }
+}
+
+const getComentariosFromProductoRejected = (state, {payload}) => ({
+    ...state,
+    error: payload
+})
+
+const postComentarioInProductoFullfilled = (state, {payload}) => {
+    return {
+        ...state
+    }
+}
+
+const postComentarioInProductoRejected = (state, {payload}) => {
+    return {
+        ...state,
+        error: payload
+    }
+}
+    
+
+
 
 const Crud = {
     [fullfilled(Actions.CREATE_PRODUCT)]: createProductFullFilled,
@@ -129,7 +170,11 @@ const Crud = {
     [Actions.SET_FILTERS]: setFilters,
     [Actions.CLEAN_FILTERS]: cleanFilters,
     [fullfilled(Actions.FETCH_PRODUCT_BY_CODEBAR)]: fetchProductByCodebarFullFilled,
-    [rejected(Actions.FETCH_PRODUCT_BY_CODEBAR)]: fetchProductByCodebarRejected
+    [rejected(Actions.FETCH_PRODUCT_BY_CODEBAR)]: fetchProductByCodebarRejected,
+    [fullfilled(Actions.GET_COMENTARIOS_FROM_PRODUCTO)]: getComentariosFromProductoFullfilled,
+    [rejected(Actions.GET_COMENTARIOS_FROM_PRODUCTO)]: getComentariosFromProductoRejected,
+    [fullfilled(Actions.POST_COMENTARIO_IN_PRODUCTO)]: postComentarioInProductoFullfilled,
+    [rejected(Actions.POST_COMENTARIO_IN_PRODUCTO)]: postComentarioInProductoRejected
 }
 
 export default Crud

@@ -8,11 +8,6 @@ import Constants from 'expo-constants';
 import { Text, View, Platform, Dimensions, StyleSheet, Image, ScrollView } from 'react-native';
 import { Icon, Button, Input, Card } from 'react-native-elements';
 import { BarCodeScanner } from 'expo-barcode-scanner'
-import {
-    Paragraph,
-    Title,
-    Avatar
-} from 'react-native-paper'
 
 //Own components
 import Header from '../../components/Header'

@@ -6,7 +6,9 @@ import {
     fetchSupermarkets,
     setFilters,
     cleanFilters,
-    fetchProductByCodebar
+    fetchProductByCodebar,
+    getComentariosFromProducto,
+    postComentarioInProducto
 } from './crud'
 
 const Actions = {
@@ -21,5 +23,7 @@ export {
     fetchSupermarkets,
     setFilters,
     cleanFilters,
-    fetchProductByCodebar
+    fetchProductByCodebar,
+    getComentariosFromProducto,
+    postComentarioInProducto
 }

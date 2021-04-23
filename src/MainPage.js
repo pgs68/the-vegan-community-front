@@ -56,7 +56,9 @@ function SideMenu({props, userLogged}){
                 <DrawerItem 
                     label="Cerrar sesión"
                     icon={() => <Icon name='sign-out-alt' type='font-awesome-5'/>}
-                    onPress={() => logout(props.navigation, isLoggedInChange)}
+                    onPress={() => {
+                        logout(props.navigation, isLoggedInChange)
+                    }}
                 />
             }
         </DrawerContentScrollView>
@@ -88,7 +90,7 @@ const MainPage = ({
     }, [])
 
     return (
-            <Drawer.Navigator initialRouteName={"Home"} drawerContent={props => <SideMenu props={props} userLogged={userLogged}/>}>
+            <Drawer.Navigator initialRouteName={userLogged ? "Home" : "Login"} drawerContent={props => <SideMenu props={props} userLogged={userLogged}/>}>
                 {
                     userLogged ? (
                         <>
