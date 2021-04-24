@@ -28,7 +28,10 @@ const TypeActionsCrud = {
     CLEAN_FILTERS: 'CLEAN_FILTERS',
     FETCH_PRODUCT_BY_CODEBAR: 'FETCH_PRODUCT_BY_CODEBAR',
     GET_COMENTARIOS_FROM_PRODUCTO: 'GET_COMENTARIOS_FROM_PRODUCTO',
-    POST_COMENTARIO_IN_PRODUCTO: 'POST_COMENTARIO_IN_PRODUCTO'
+    POST_COMENTARIO_IN_PRODUCTO: 'POST_COMENTARIO_IN_PRODUCTO',
+    SET_REPORTED_PRODUCT: 'SET_REPORTED_PRODUCT',
+    SET_REPORTED_COMMENT: 'SET_REPORTED_COMMENT',
+    CLEAN_REPORTED_OBJECT: 'CLEAN_REPORTED_OBJECT'
 }
 
 const transformProductObject = (producto, currentUser) => {
@@ -112,6 +115,24 @@ const postComentarioInProducto = (codebar, comentario, usuario) => ({
                 })
 })
 
+const setReportedProduct = (product) => ({
+    type: TypeActionsCrud.SET_REPORTED_PRODUCT,
+    payload: {
+        product
+    }
+})
+
+const setReportedComment = (comment) => ({
+    type: TypeActionsCrud.SET_REPORTED_COMMENT,
+    payload: {
+        comment
+    }
+})
+
+const cleanReportedObject = () => ({
+    type: TypeActionsCrud.CLEAN_REPORTED_OBJECT
+})
+
 export {
     TypeActionsCrud,
     createProduct,
@@ -122,5 +143,8 @@ export {
     cleanFilters,
     fetchProductByCodebar,
     getComentariosFromProducto,
-    postComentarioInProducto
+    postComentarioInProducto,
+    setReportedProduct,
+    setReportedComment,
+    cleanReportedObject
 }

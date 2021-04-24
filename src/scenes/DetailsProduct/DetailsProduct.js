@@ -1,5 +1,5 @@
 //Utilities
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect, useRef} from 'react';
 import { connect } from 'react-redux'
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -8,9 +8,10 @@ import {
     View,
     Text,
     ScrollView,
-    Dimensions
+    Dimensions,
+    Platform
 } from 'react-native';
-import { Icon, Card, Input, Button } from 'react-native-elements';
+import { Icon, Card, Input, Button, Tooltip } from 'react-native-elements';
 import {
     Paragraph,
     Title,
@@ -24,7 +25,7 @@ import styles from './styles'
 import Comentario from '../../components/Comentario'
 
 //Actions and functions
-import { getComentariosFromProducto, postComentarioInProducto } from '../../actions/product'
+import { getComentariosFromProducto, postComentarioInProducto, setReportedProduct, setReportedComment } from '../../actions/product'
 
 
 const getAllSupermarkets = (supermarkets) => {
@@ -47,11 +48,14 @@ const DetailsProduct = ({
     postComentarioInProducto,
     getComentariosFromProducto,
     usuario,
-    isLoggedIn
+    isLoggedIn,
+    setReportedProduct,
+    setReportedComment
 }) => {
 
     const [supermercados, setSupermercados] = useState('')
     const [newComment, setNewComment] = useState('')
+    const tooltipRef = useRef(null)
 
     useEffect(() => {
         setSupermercados(getAllSupermarkets(producto.supermercados))
@@ -66,15 +70,25 @@ const DetailsProduct = ({
                     <Carousel images={[producto.fotoPrincipal, producto.detalles.fotoIngredientes]}/>
                     <View style={styles.rowTitleDetails}>
                         <Title>{producto.nombre}</Title>
-                        <View style={styles.productRating}>
-                            <Paragraph>{producto.valoracion}</Paragraph>
-                            <Icon name='star-o' type='font-awesome' color='#efdf74'/>
-                            {
-                                // Cuando se implementen las votaciones, y el usuario haya votado el producto, se usará este icono:
-                                //    <Icon name='star' type='font-awesome'/>
-                                
-                            }
-                        </View>
+                        {
+                            isLoggedIn &&
+                            <Tooltip 
+                                skipAndroidStatusBar={Platform.OS === 'web'} 
+                                backgroundColor='#aec5de'
+                                ref={tooltipRef}
+                                popover={
+                                    <View style={styles.column}>
+                                        <Text onPress={() => {
+                                            tooltipRef.current.toggleTooltip();
+                                            setReportedProduct(producto)
+                                            navigation.navigate('Report')
+                                        }}>Reportar</Text>
+                                    </View>
+                                }
+                            >
+                                <Icon name='options-vertical' type='simple-line-icon' color='#a5a5a5'/>
+                            </Tooltip>
+                        }
                     </View>
                     <View style={styles.rowDetails}>
                         <View style={styles.row}>
@@ -98,7 +112,11 @@ const DetailsProduct = ({
                         producto.detalles.comentarios && 
                         producto.detalles.comentarios.map(comentario => {
                             return (
-                                <Comentario comentario={comentario} />
+                                <Comentario 
+                                    comentario={comentario} 
+                                    navigation={navigation}
+                                    setReportedComment={setReportedComment}
+                                />
                             )
                         })
                     }
@@ -147,7 +165,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
     postComentarioInProducto,
-    getComentariosFromProducto
+    getComentariosFromProducto,
+    setReportedProduct,
+    setReportedComment
 }
 
 const DetailsProductConnected = connect(mapStateToProps, mapDispatchToProps)(DetailsProduct)

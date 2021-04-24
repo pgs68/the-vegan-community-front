@@ -8,7 +8,10 @@ import {
     cleanFilters,
     fetchProductByCodebar,
     getComentariosFromProducto,
-    postComentarioInProducto
+    postComentarioInProducto,
+    setReportedProduct,
+    setReportedComment,
+    cleanReportedObject
 } from './crud'
 
 const Actions = {
@@ -25,5 +28,8 @@ export {
     cleanFilters,
     fetchProductByCodebar,
     getComentariosFromProducto,
-    postComentarioInProducto
+    postComentarioInProducto,
+    setReportedProduct,
+    setReportedComment,
+    cleanReportedObject
 }

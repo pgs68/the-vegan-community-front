@@ -153,6 +153,39 @@ const postComentarioInProductoRejected = (state, {payload}) => {
         error: payload
     }
 }
+
+const setReportedProduct = (state, {payload}) => {
+    return {
+        ...state,
+        reportObject: {
+            isReportedComment: false,
+            isReportedProduct: true,
+            object: payload.product
+        }
+    }
+}
+
+const setReportedComment = (state, {payload}) => {
+    return {
+        ...state,
+        reportObject: {
+            isReportedComment: true,
+            isReportedProduct: false,
+            object: payload.comment
+        }
+    }
+}
+
+const cleanReportedObject = state => {
+    return {
+        ...state,
+        reportObject:{
+            isReportedComment: false,
+            isReportedProduct: false,
+            object: {}
+        }
+    }
+}
     
 
 
@@ -174,7 +207,10 @@ const Crud = {
     [fullfilled(Actions.GET_COMENTARIOS_FROM_PRODUCTO)]: getComentariosFromProductoFullfilled,
     [rejected(Actions.GET_COMENTARIOS_FROM_PRODUCTO)]: getComentariosFromProductoRejected,
     [fullfilled(Actions.POST_COMENTARIO_IN_PRODUCTO)]: postComentarioInProductoFullfilled,
-    [rejected(Actions.POST_COMENTARIO_IN_PRODUCTO)]: postComentarioInProductoRejected
+    [rejected(Actions.POST_COMENTARIO_IN_PRODUCTO)]: postComentarioInProductoRejected,
+    [Actions.SET_REPORTED_PRODUCT]: setReportedProduct,
+    [Actions.SET_REPORTED_COMMENT]: setReportedComment,
+    [Actions.CLEAN_REPORTED_OBJECT]: cleanReportedObject
 }
 
 export default Crud
