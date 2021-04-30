@@ -120,7 +120,7 @@ const getComentariosFromProductoFullfilled = (state, {payload}) => {
     if(payload.docs.length){
         payload.docs.forEach((doc) => {
             var comentario = doc.data()
-            comentarios.push(comentario)
+            comentarios.push({id: doc.id, ...comentario})
         })
     } 
 

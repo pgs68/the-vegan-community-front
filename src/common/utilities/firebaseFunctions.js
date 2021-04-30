@@ -30,12 +30,13 @@ const getUserInformation = (uid) => {
 }
 
 
-const login = (user, navigation, setError) => {
+const login = (user, navigation, setError, setUserInformation) => {
     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
         .then(() => {
             firebase.auth()
                 .signInWithEmailAndPassword(user.email, user.password)
-                .then((e) => {
+                .then((userLogged) => {
+                    setUserInformation(userLogged.user.uid)
                     navigation.navigate('Home')
                 })
                 .catch(error => {
@@ -55,13 +56,13 @@ const logout = (navigation, changeLoggedIn) => {
         })
 }
 
-const register = (user, navigation, setError) => {
+const register = (user, navigation, setError, setUserInformation) => {
     if(user.password !== user.repeatPassword){
         setError({message: 'Las contraseñas no coinciden'})
     } else {
         firebase.auth()
             .createUserWithEmailAndPassword(user.email, user.password)
-            .then(() => {
+            .then((userCreated) => {
                 firebase.firestore()
                     .collection("usuarios")
                     .doc(user.userName)
@@ -73,6 +74,7 @@ const register = (user, navigation, setError) => {
                             currentUser.delete()
                         } else {
                             firebase.firestore().collection("usuarios").doc(user.userName).set({
+                                "UID": userCreated.user.uid,
                                 "cantidadComentarios": 0,
                                 "email": user.email,
                                 "estado": "activa",
@@ -82,7 +84,8 @@ const register = (user, navigation, setError) => {
                                 "nombreUsuario": user.userName
                             })
                             .then(() => {
-                                console.log('User account created & signed in!');  
+                                console.log('User account created & signed in!');
+                                setUserInformation(userCreated.user.uid)  
                                 navigation.navigate('Home')
                             })
                             .catch(error => {

@@ -19,7 +19,8 @@ const { width } = Dimensions.get('window');
 const Comentario = ({
     comentario,
     navigation,
-    setReportedComment
+    setReportedComment,
+    reportEnabled = true 
 }) => {
     const tooltipRef = useRef(null)
     return (
@@ -42,24 +43,27 @@ const Comentario = ({
                     </View>
                 </View>
             </View>
-            <View style={styles.column}>
-                <Tooltip 
-                    skipAndroidStatusBar={Platform.OS === 'web'} 
-                    backgroundColor='#aec5de'
-                    ref={tooltipRef}
-                    popover={
-                        <View style={styles.column}>
-                            <Text onPress={() => {
-                                tooltipRef.current.toggleTooltip();
-                                setReportedComment(comentario)
-                                navigation.navigate('Report')
-                            }}>Reportar</Text>
-                        </View>
-                    }
-                >
-                    <Icon name='options-vertical' type='simple-line-icon' color='#a5a5a5'/>
-                </Tooltip>
-            </View>
+            {reportEnabled &&
+                <View style={styles.column}>
+                    <Tooltip 
+                        skipAndroidStatusBar={Platform.OS === 'web'} 
+                        backgroundColor='#aec5de'
+                        ref={tooltipRef}
+                        popover={
+                            <View style={styles.column}>
+                                <Text onPress={() => {
+                                    tooltipRef.current.toggleTooltip();
+                                    setReportedComment(comentario)
+                                    navigation.navigate('Report')
+                                }}>Reportar</Text>
+                            </View>
+                        }
+                    >
+                        <Icon name='options-vertical' type='simple-line-icon' color='#a5a5a5'/>
+                    </Tooltip>
+                </View>
+            }
+            
             
         </View>
     )

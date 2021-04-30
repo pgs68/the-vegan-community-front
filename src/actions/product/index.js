@@ -11,7 +11,9 @@ import {
     postComentarioInProducto,
     setReportedProduct,
     setReportedComment,
-    cleanReportedObject
+    cleanReportedObject,
+    reportComentario,
+    reportProducto
 } from './crud'
 
 const Actions = {
@@ -31,5 +33,7 @@ export {
     postComentarioInProducto,
     setReportedProduct,
     setReportedComment,
-    cleanReportedObject
+    cleanReportedObject,
+    reportComentario,
+    reportProducto
 }

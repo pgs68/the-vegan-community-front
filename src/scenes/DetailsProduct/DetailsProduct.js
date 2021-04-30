@@ -112,8 +112,8 @@ const DetailsProduct = ({
                         producto.detalles.comentarios && 
                         producto.detalles.comentarios.map(comentario => {
                             return (
-                                <Comentario 
-                                    comentario={comentario} 
+                                <Comentario
+                                    comentario={{...comentario, codebar: producto.codebar}} 
                                     navigation={navigation}
                                     setReportedComment={setReportedComment}
                                 />
@@ -131,6 +131,7 @@ const DetailsProduct = ({
                             value={newComment} 
                             onChangeText={value => setNewComment(value)}
                             containerStyle={{ width: width*0.75, marginTop: 5 }}
+                            caretHidden={true}
                         />
                         <Button 
                             title='Enviar'

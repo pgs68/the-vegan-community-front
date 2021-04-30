@@ -31,7 +31,9 @@ const TypeActionsCrud = {
     POST_COMENTARIO_IN_PRODUCTO: 'POST_COMENTARIO_IN_PRODUCTO',
     SET_REPORTED_PRODUCT: 'SET_REPORTED_PRODUCT',
     SET_REPORTED_COMMENT: 'SET_REPORTED_COMMENT',
-    CLEAN_REPORTED_OBJECT: 'CLEAN_REPORTED_OBJECT'
+    CLEAN_REPORTED_OBJECT: 'CLEAN_REPORTED_OBJECT',
+    REPORT_COMENTARIO: 'REPORT_COMENTARIO',
+    REPORT_PRODUCTO: 'REPORT_PRODUCTO'
 }
 
 const transformProductObject = (producto, currentUser) => {
@@ -65,7 +67,11 @@ const fetchProducts = (filtros) => {
     var query = firebase.firestore().collection("productos")
     if(filtros.supermercado !== ''){
         query = query.where("supermercados", "array-contains", filtros.supermercado)
+    } else {
+        query = query.orderBy('fechaPublicacion', 'desc')
     }
+    //query = query.orderBy('fechaPublicacion', 'desc')
+    //TO-DO: que funcione el filtrar por supermercado ordenando por fecha
     return {
         type: TypeActionsCrud.FETCH_PRODUCTS,
         payload: query.get()
@@ -133,6 +139,26 @@ const cleanReportedObject = () => ({
     type: TypeActionsCrud.CLEAN_REPORTED_OBJECT
 })
 
+const reportComentario = (report, codebar, idComentario, usuario) => ({
+    type: TypeActionsCrud.REPORT_COMENTARIO,
+    payload: firebase.firestore().collection("productos/" + codebar + "/comentarios/" + idComentario + "/reportes")
+                .add({
+                    autor: usuario.nombreUsuario,
+                    imagenAutor: usuario.imagenUsuario,
+                    detalles: report
+                })
+})
+
+const reportProducto = (report, codebar, usuario) => ({
+    type: TypeActionsCrud.REPORT_PRODUCTO,
+    payload: firebase.firestore().collection("productos/" + codebar + "/reportes")
+                .add({
+                    autor: usuario.nombreUsuario,
+                    imagenAutor: usuario.imagenUsuario,
+                    detalles: report
+                })
+})
+
 export {
     TypeActionsCrud,
     createProduct,
@@ -146,5 +172,7 @@ export {
     postComentarioInProducto,
     setReportedProduct,
     setReportedComment,
-    cleanReportedObject
+    cleanReportedObject,
+    reportComentario,
+    reportProducto
 }

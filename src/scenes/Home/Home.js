@@ -38,6 +38,7 @@ const Home = ({
     useFocusEffect(
         React.useCallback(() => {
             //ComponentWillMount
+            //fetchProducts(filtros)
             return () => {
                 //ComponentWillUnmount
                 setExpandedFilters(false)

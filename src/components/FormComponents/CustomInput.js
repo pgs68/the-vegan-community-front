@@ -20,6 +20,7 @@ const CustomInput = ({
             secureTextEntry={isPasswordInput}
             value={defaultValue}
             keyboardType={type === 'number' ? 'numeric' : 'default'}
+            caretHidden={true}
         />
     )
 }
