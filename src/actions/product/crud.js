@@ -28,7 +28,12 @@ const TypeActionsCrud = {
     CLEAN_FILTERS: 'CLEAN_FILTERS',
     FETCH_PRODUCT_BY_CODEBAR: 'FETCH_PRODUCT_BY_CODEBAR',
     GET_COMENTARIOS_FROM_PRODUCTO: 'GET_COMENTARIOS_FROM_PRODUCTO',
-    POST_COMENTARIO_IN_PRODUCTO: 'POST_COMENTARIO_IN_PRODUCTO'
+    POST_COMENTARIO_IN_PRODUCTO: 'POST_COMENTARIO_IN_PRODUCTO',
+    SET_REPORTED_PRODUCT: 'SET_REPORTED_PRODUCT',
+    SET_REPORTED_COMMENT: 'SET_REPORTED_COMMENT',
+    CLEAN_REPORTED_OBJECT: 'CLEAN_REPORTED_OBJECT',
+    REPORT_COMENTARIO: 'REPORT_COMENTARIO',
+    REPORT_PRODUCTO: 'REPORT_PRODUCTO'
 }
 
 const transformProductObject = (producto, currentUser) => {
@@ -62,7 +67,11 @@ const fetchProducts = (filtros) => {
     var query = firebase.firestore().collection("productos")
     if(filtros.supermercado !== ''){
         query = query.where("supermercados", "array-contains", filtros.supermercado)
+    } else {
+        query = query.orderBy('fechaPublicacion', 'desc')
     }
+    //query = query.orderBy('fechaPublicacion', 'desc')
+    //TO-DO: que funcione el filtrar por supermercado ordenando por fecha
     return {
         type: TypeActionsCrud.FETCH_PRODUCTS,
         payload: query.get()
@@ -112,6 +121,44 @@ const postComentarioInProducto = (codebar, comentario, usuario) => ({
                 })
 })
 
+const setReportedProduct = (product) => ({
+    type: TypeActionsCrud.SET_REPORTED_PRODUCT,
+    payload: {
+        product
+    }
+})
+
+const setReportedComment = (comment) => ({
+    type: TypeActionsCrud.SET_REPORTED_COMMENT,
+    payload: {
+        comment
+    }
+})
+
+const cleanReportedObject = () => ({
+    type: TypeActionsCrud.CLEAN_REPORTED_OBJECT
+})
+
+const reportComentario = (report, codebar, idComentario, usuario) => ({
+    type: TypeActionsCrud.REPORT_COMENTARIO,
+    payload: firebase.firestore().collection("productos/" + codebar + "/comentarios/" + idComentario + "/reportes")
+                .add({
+                    autor: usuario.nombreUsuario,
+                    imagenAutor: usuario.imagenUsuario,
+                    detalles: report
+                })
+})
+
+const reportProducto = (report, codebar, usuario) => ({
+    type: TypeActionsCrud.REPORT_PRODUCTO,
+    payload: firebase.firestore().collection("productos/" + codebar + "/reportes")
+                .add({
+                    autor: usuario.nombreUsuario,
+                    imagenAutor: usuario.imagenUsuario,
+                    detalles: report
+                })
+})
+
 export {
     TypeActionsCrud,
     createProduct,
@@ -122,5 +169,10 @@ export {
     cleanFilters,
     fetchProductByCodebar,
     getComentariosFromProducto,
-    postComentarioInProducto
+    postComentarioInProducto,
+    setReportedProduct,
+    setReportedComment,
+    cleanReportedObject,
+    reportComentario,
+    reportProducto
 }

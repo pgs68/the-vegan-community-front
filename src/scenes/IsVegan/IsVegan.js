@@ -103,6 +103,7 @@ const IsVegan = ({
                                         placeholder={'Codigo de barras'}
                                         value={codigoBarras} 
                                         onChangeText={value => setCodigoBarras(value)}
+                                        caretHidden={true}
                                     />
                                     <Button 
                                         title='Comprobar producto'

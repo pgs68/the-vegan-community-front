@@ -80,8 +80,7 @@ const Login = ({
                                 title='Iniciar sesión'
                                 type='outline'
                                 onPress={() =>{
-                                    login(user, navigation, setError)
-                                    setUserInformation('TngQoo9FLbh5BvVSPhocoil2APH2')
+                                    login(user, navigation, setError, setUserInformation)
                                 }}
                                 disabled={user.email === '' || user.password === ''} 
                             />

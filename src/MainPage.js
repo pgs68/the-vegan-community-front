@@ -18,6 +18,7 @@ import IsVegan from './scenes/IsVegan'
 import AddProduct from './scenes/AddProduct'
 import ListaSupermercados from './scenes/ListaSupermercados'
 import DetailsProduct from './scenes/DetailsProduct'
+import Report from './scenes/Report'
 
 //Actions and functions
 import { isLoggedInChange, setUserInformation } from './actions/user'
@@ -99,6 +100,7 @@ const MainPage = ({
                             <Drawer.Screen name="AddProduct" component={AddProduct} />
                             <Drawer.Screen name="ListaSupermercados" component={ListaSupermercados} />
                             <Drawer.Screen name="DetailsProduct" component={DetailsProduct} />
+                            <Drawer.Screen name="Report" component={Report} />
                         </>
                     ) : (
                         <>

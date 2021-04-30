@@ -18,7 +18,12 @@ const initialState = {
         show: false,
         message: ''
     },
-    filtros: initialFilters
+    filtros: initialFilters,
+    reportObject:{
+        isReportedComment: false,
+        isReportedProduct: false,
+        object: {}
+    }
 }
 
 const Managers = {

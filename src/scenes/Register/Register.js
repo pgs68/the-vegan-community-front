@@ -1,5 +1,6 @@
 //Utilities
 import React, { useState } from 'react'
+import { connect } from 'react-redux'
 import { useFocusEffect } from '@react-navigation/native';
 
 //Library components
@@ -14,9 +15,13 @@ import styles from '../../styles/commonStyles'
 
 //Actions and functions
 import { register } from '../../common/utilities/firebaseFunctions'
+import { setUserInformation } from '../../actions/user'
 
 
-const Register = ({navigation}) => {
+const Register = ({
+    navigation,
+    setUserInformation
+}) => {
 
     const [user, setUser] = useState({
         email: '',
@@ -92,7 +97,7 @@ const Register = ({navigation}) => {
                             <Button 
                                 title='Registrarse'
                                 type='outline'
-                                onPress={() =>register(user, navigation, setError)}
+                                onPress={() =>register(user, navigation, setError, setUserInformation)}
                                 disabled={
                                     user.email === '' || 
                                     user.password === '' ||
@@ -114,4 +119,13 @@ const Register = ({navigation}) => {
     )
 }
 
-export default Register;
+const mapStateToProps = state => ({
+})
+
+const mapDispatchToProps = {
+    setUserInformation
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Register)
+
+export { Register };

@@ -54,7 +54,6 @@ const AddProduct = ({
     useFocusEffect(
         React.useCallback(() => {
             //ComponentWillMount
-            console.log(producto)
             return () => {
                 //ComponentWillUnmount
                     setFotoGeneral(null)
@@ -148,6 +147,7 @@ const AddProduct = ({
                 fotoIngredientes: urlFotoIngredientes
             }
             createProduct(productoFinal, currentUser)
+            navigation.navigate('Home')
         }
     }
 
